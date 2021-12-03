@@ -1,0 +1,192 @@
+buildscript {
+    repositories {
+        maven { url "https://nexus.gluonhq.com/nexus/content/repositories/releases"}
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:5.2.0"
+        classpath "io.franzbecker:gradle-lombok:4.0.0"
+        classpath 'org.openjfx:javafx-plugin:0.0.10'
+        classpath 'com.gluonhq:client-gradle-plugin:0.1.42'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'io.franzbecker.gradle-lombok'
+apply plugin: 'org.openjfx.javafxplugin'
+apply plugin: 'com.gluonhq.client-gradle-plugin'
+
+group 'com.crazyxacker.apps.tmu'
+version '1.0'
+applicationName = 'TelegraphMangaUploader'
+mainClassName = 'com.crazyxacker.apps.tmu.Main'
+compileJava.options.encoding = 'UTF-8'
+System.setProperty('file.encoding', 'UTF-8')
+
+repositories {
+    mavenCentral()
+    //noinspection JCenterRepository
+    jcenter()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://nexus.gluonhq.com/nexus/content/repositories/releases/' }
+}
+
+gluonClient {
+    graalvmHome = "C:\\GraalVM\\graalvm-ce-java11-21.1.0"
+}
+
+javafx {
+    version = '16'
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics']
+}
+
+lombok {
+    version = "1.18.10"
+    sha256 = ""
+}
+
+dependencies {
+    // AnnotationsProcessors
+    // Lombok
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+    // SubstrateVM features
+    compileOnly "org.graalvm.nativeimage:svm:21.1.0"
+
+    // JetBrains Annotations
+    compileOnly 'org.jetbrains:annotations:20.1.0'
+
+    // JavaFX (Material Design)
+    compile 'com.jfoenix:jfoenix:9.0.10'
+
+    // JavaFX (Icons)
+    compile 'de.jensd:fontawesomefx-commons:11.0'
+    compile 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-11'
+    compile 'de.jensd:fontawesomefx-materialicons:2.2.0-11'
+
+    // JSON
+    compile 'com.google.code.gson:gson:2.8.5'
+
+    // TelegraphAPI
+//    compile 'org.telegram:telegraph:1.0'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+    implementation 'org.json:json:20160810'
+    implementation 'javax.validation:validation-api:1.1.0.Final'
+
+    // Content detection
+    compile "org.apache.tika:tika-core:1.24.1"
+    compile "net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01"
+    compile "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01"
+
+    // Apache Commons
+    compile "commons-io:commons-io:2.5"
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': applicationName,
+                'Implementation-Version': version,
+                'Main-Class': mainClassName,
+                'Built-By': 'CrazyXacker'
+    }
+}
+
+run {
+    new File(project.buildDir, "/resources/main/config.properties").delete()
+    applicationDefaultJvmArgs = [
+            "--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
+            "--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            "--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED",
+            "--add-exports=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
+            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            // For various usages of TraversalEngine
+            "--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+            "--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+            // For various behaviors across controls
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            // For ReadOnlyUnbackedObservableList across files
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            // For InputMap used in behavior classes
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
+            // For EventHandlerManager in AutoCompletionBinding
+            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            // For MappingChange, NonIterableChange across files
+            "--add-exports=javafx.base/com.sun.javafx.collections=ALL-UNNAMED",
+            // For VersionInfo in VersionChecker
+            "--add-exports=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
+            // For accessing VirtualFlow field from the base class in GridViewSkin
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
+            // For accessing getChildren in ImplUtils
+            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.collections=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+            "--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            "--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
+    ]
+    jvmArgs = [
+            "--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
+            "--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            "--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED",
+            "--add-exports=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
+            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            // For various usages of TraversalEngine
+            "--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+            "--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+            // For various behaviors across controls
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            // For ReadOnlyUnbackedObservableList across files
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            // For InputMap used in behavior classes
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
+            // For EventHandlerManager in AutoCompletionBinding
+            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            // For MappingChange, NonIterableChange across files
+            "--add-exports=javafx.base/com.sun.javafx.collections=ALL-UNNAMED",
+            // For VersionInfo in VersionChecker
+            "--add-exports=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
+            // For accessing VirtualFlow field from the base class in GridViewSkin
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
+            // For accessing getChildren in ImplUtils
+            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.collections=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+            "--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            "--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
+    ]
+}

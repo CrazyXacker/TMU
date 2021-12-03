@@ -1,0 +1,25 @@
+{
+  "resources":{
+  "includes":[
+    {"pattern":"\\QWindows-amd64/lib7-Zip-JBinding.dll\\E"}, 
+    {"pattern":"\\QWindows-amd64/sevenzipjbinding-lib.properties\\E"}, 
+    {"pattern":"\\Qcss/theme.css\\E"}, 
+    {"pattern":"\\Qcss/theme_dark.css\\E"},
+    {"pattern":"\\Qde/jensd/fx/glyphs/materialdesignicons/materialdesignicons-webfont.ttf\\E"},
+    {"pattern":"\\Qfxml/Main.fxml\\E"}, 
+    {"pattern":"\\Qfxml/cards/UploadInfoCard.fxml\\E"}, 
+    {"pattern":"\\Qfxml/controls/DragNDropFilesView.fxml\\E"}, 
+    {"pattern":"\\Qfxml/controls/EmptyView.fxml\\E"}, 
+    {"pattern":"\\Qimages/app_icon.png\\E"}, 
+    {"pattern":"\\Qimages/app_icon_dark.png\\E"},
+    {"pattern":"\\Qmozilla/public-suffix-list.txt\\E"},
+    {"pattern":"\\Qorg/apache/http/client/version.properties\\E"}, 
+    {"pattern":"\\Qorg/apache/tika/mime/tika-mimetypes.xml\\E"}, 
+    {"pattern":"\\Qsevenzipjbinding-platforms.properties\\E"}
+  ]},
+  "bundles":[
+    {"name":"com.sun.javafx.tk.quantum.QuantumMessagesBundle"}, 
+    {"name":"com/sun/javafx/scene/control/skin/resources/controls"}, 
+    {"name":"language"}
+  ]
+}

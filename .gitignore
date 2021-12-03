@@ -48,3 +48,7 @@ Thumbs.db
 *.mov
 *.wmv
 
+app.properties
+.gradle/
+build/client/x86_64-windows/gvm/log/client-debug0.log.13
+build/client/x86_64-windows/

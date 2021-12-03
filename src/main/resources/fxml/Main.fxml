@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.crazyxacker.apps.tmu.controls.DragNDropFilesView?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import com.crazyxacker.apps.tmu.controls.EmptyView?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="600.0" prefWidth="800.0"
+           style="-fx-background-color: -fx-primary-color;" xmlns="http://javafx.com/javafx/11.0.2"
+           fx:controller="com.crazyxacker.apps.tmu.controller.MainController">
+    <BorderPane>
+        <center>
+            <VBox alignment="CENTER" fillWidth="false" spacing="20.0" BorderPane.alignment="CENTER">
+                <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXTextField fx:id="tfTitle" focusColor="#ffffff00" promptText="%gui.title" style="-fx-text-fill: -fx-accent-color;"
+                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="8.0" right="8.0"/>
+                            </HBox.margin>
+                        </JFXTextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXTextField fx:id="tfTags" focusColor="#ffffff00" promptText="%gui.tags" style="-fx-text-fill: -fx-accent-color;"
+                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="8.0" right="8.0"/>
+                            </HBox.margin>
+                        </JFXTextField>
+                    </children>
+                </HBox>
+                <HBox prefWidth="550.0" spacing="20.0">
+                    <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                        <children>
+                            <JFXTextField fx:id="tfAuthor" focusColor="#ffffff00" promptText="%gui.author" style="-fx-text-fill: -fx-accent-color;"
+                                          unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                                <font>
+                                    <Font size="16.0"/>
+                                </font>
+                                <HBox.margin>
+                                    <Insets left="8.0" right="8.0"/>
+                                </HBox.margin>
+                            </JFXTextField>
+                        </children>
+                    </HBox>
+                    <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                        <children>
+                            <JFXTextField fx:id="tfAuthorLink" focusColor="#ffffff00" promptText="%gui.author_link" style="-fx-text-fill: -fx-accent-color;"
+                                          unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                                <font>
+                                    <Font size="16.0"/>
+                                </font>
+                                <HBox.margin>
+                                    <Insets left="8.0" right="8.0"/>
+                                </HBox.margin>
+                            </JFXTextField>
+                        </children>
+                    </HBox>
+                </HBox>
+                <DragNDropFilesView fx:id="uploadFiles" prefHeight="250.0" prefWidth="550.0"
+                                    chooserExtensionsFilterDescription="%gui.supported_formats"
+                                    extensionsFilter="*.cbz,*.zip,*.cbr,*.rar,*.png,*.jpg,*.jpeg,*.gif,*.webp"
+                                    BorderPane.alignment="CENTER"/>
+                <JFXButton fx:id="btnUpload" alignment="CENTER" buttonType="FLAT" minWidth="100.0" prefHeight="32.0"
+                           ripplerFill="WHITE" styleClass="button-colored-no-shadow" text="%gui.upload" style="-fx-text-fill: -fx-primary-color;"
+                           HBox.hgrow="ALWAYS">
+                    <graphic>
+                        <MaterialDesignIconView fx:id="mdivUpload" glyphName="UPLOAD" glyphStyle="-fx-fill: -fx-primary-color;"
+                                                size="16px"/>
+                    </graphic>
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </JFXButton>
+                <HBox fx:id="hbUrl" visible="false" managed="false" alignment="CENTER" prefWidth="550.0"
+                      styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXTextField fx:id="tfUrl" focusColor="#ffffff00" unFocusColor="#ffffff00" style="-fx-text-fill: -fx-accent-color;" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="8.0" right="8.0"/>
+                            </HBox.margin>
+                        </JFXTextField>
+                        <StackPane fx:id="spCopyImage" prefHeight="36.0" prefWidth="36.0">
+                            <children>
+                                <MaterialDesignIconView fx:id="mdivCopyImage" glyphName="IMAGE"
+                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                            </children>
+                        </StackPane>
+                        <StackPane fx:id="spCopyForTelegram" prefHeight="36.0" prefWidth="36.0">
+                            <children>
+                                <MaterialDesignIconView fx:id="mdivCopyForTelegram" glyphName="TELEGRAM"
+                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                            </children>
+                        </StackPane>
+                        <StackPane fx:id="spCopyLink" prefHeight="36.0" prefWidth="36.0">
+                            <children>
+                                <MaterialDesignIconView fx:id="mdivCopyLink" glyphName="CONTENT_COPY"
+                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                            </children>
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                        </StackPane>
+                        <StackPane fx:id="spOpenInBrowser" prefHeight="36.0" prefWidth="36.0">
+                            <children>
+                                <MaterialDesignIconView fx:id="mdivOpenInBrowser" glyphName="WEB"
+                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                            </children>
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                        </StackPane>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="16.0"/>
+                    </VBox.margin>
+                </HBox>
+            </VBox>
+        </center>
+        <bottom>
+            <Label fx:id="lblError" managed="false" text="Label" style="-fx-text-fill: #e42121" visible="false"
+                   BorderPane.alignment="CENTER">
+                <BorderPane.margin>
+                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                </BorderPane.margin>
+                <font>
+                    <Font name="System Bold" size="16.0"/>
+                </font>
+            </Label>
+        </bottom>
+        <right>
+            <StackPane>
+                <VBox alignment="TOP_CENTER" prefWidth="350.0"
+                      style="-fx-border-style: hidden hidden hidden solid; -fx-border-width: 1; -fx-border-color: -fx-divider-color"
+                      BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="%gui.my_uploads">
+                            <VBox.margin>
+                                <Insets bottom="8.0" top="8.0"/>
+                            </VBox.margin>
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                        </Label>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox fx:id="vbUploads">
+                                    <padding>
+                                        <Insets left="4.0"/>
+                                    </padding>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets/>
+                    </BorderPane.margin>
+                </VBox>
+                <EmptyView fx:id="evEmptyView"/>
+            </StackPane>
+        </right>
+    </BorderPane>
+</StackPane>
