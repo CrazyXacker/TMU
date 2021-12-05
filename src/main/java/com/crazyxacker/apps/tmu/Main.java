@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 public class Main extends Application {
     public static final String APP_NAME = "TelegraphMangaUploader";
-    public static final String APP_URL = "https://t.me/tlgrph_mangauploader";
+    public static final String APP_GITHUB_URL = "https://github.com/CrazyXacker/TMU";
     public static final Gson GSON;
     @Getter
     private static Stage currentStage;
@@ -46,7 +46,7 @@ public class Main extends Application {
         Node rootNode = FXUtils.loadFXML("/fxml/Main.fxml").getKey();
 
         // Create Undecorated Scene window with Custom Decorator
-        Scene scene = FXUtils.createDecorator(stage, rootNode, 1000, 660, true, Settings.isCurrentThemeDark(), null);
+        Scene scene = FXUtils.createDecorator(stage, rootNode, 1100, 850, true, Settings.isCurrentThemeDark(), null);
 
         // Configuring Stage with title, min width/height
         stage.setTitle(APP_NAME);
