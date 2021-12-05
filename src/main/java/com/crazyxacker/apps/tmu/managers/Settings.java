@@ -104,6 +104,28 @@ public class Settings {
         setProperty(KEY_AUTHOR_LINK, value);
     }
 
+    private static final String KEY_PUBLISH_TAGS = "publish_tags";
+    private static final boolean DEFAULT_PUBLISH_TAGS = true;
+
+    public static boolean getPublishTags() {
+        return TypeUtils.getBoolDef(properties.getProperty(KEY_PUBLISH_TAGS, null), DEFAULT_PUBLISH_TAGS);
+    }
+
+    public static void putPublishTags(boolean value) {
+        setProperty(KEY_PUBLISH_TAGS, String.valueOf(value));
+    }
+
+    private static final String KEY_PUBLISH_DESCRIPTION = "publish_description";
+    private static final boolean DEFAULT_PUBLISH_DESCRIPTION = true;
+
+    public static boolean getPublishDescription() {
+        return TypeUtils.getBoolDef(properties.getProperty(KEY_PUBLISH_DESCRIPTION, null), DEFAULT_PUBLISH_DESCRIPTION);
+    }
+
+    public static void putPublishDescription(boolean value) {
+        setProperty(KEY_PUBLISH_DESCRIPTION, String.valueOf(value));
+    }
+
     private static final String KEY_UPLOAD_INFO = "upload_info";
     private static final String DEFAULT_UPLOAD_INFO = null;
 
