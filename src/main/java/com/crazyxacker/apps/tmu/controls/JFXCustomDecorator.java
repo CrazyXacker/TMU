@@ -91,8 +91,10 @@ public class JFXCustomDecorator extends VBox {
     protected JFXButton btnMin;
     protected JFXButton btnLanguage;
     protected JFXButton btnTheme;
+    protected JFXButton btnGithub;
     protected Runnable onLanguageActionRunnable;
     protected Runnable onThemeChangeActionRunnable;
+    protected Runnable onGithubActionRunnable;
 
     protected StringProperty title = new SimpleStringProperty();
     protected Text text;
@@ -224,6 +226,12 @@ public class JFXCustomDecorator extends VBox {
         btnTheme.setOnAction((action) -> onThemeChangeActionRunnable.run());
         btnTheme.setGraphic(FXUtils.createMaterialDesignIconView(isDarkTheme ? MaterialDesignIcon.LIGHTBULB_OUTLINE : MaterialDesignIcon.LIGHTBULB, 20, isDarkTheme ? "#ffffff" : "#000000"));
 
+        btnGithub = new JFXButton();
+        btnGithub.getStyleClass().add("jfx-decorator-button");
+        btnGithub.setCursor(Cursor.HAND);
+        btnGithub.setOnAction((action) -> onGithubActionRunnable.run());
+        btnGithub.setGraphic(FXUtils.createMaterialDesignIconView(MaterialDesignIcon.GITHUB_CIRCLE, 20, isDarkTheme ? "#ffffff" : "#000000"));
+
         btnFull = new JFXButton();
         btnFull.getStyleClass().add("jfx-decorator-button");
         btnFull.setCursor(Cursor.HAND);
@@ -352,13 +360,17 @@ public class JFXCustomDecorator extends VBox {
         HBox.setHgrow(graphicTextContainer, Priority.ALWAYS);
         HBox.setMargin(graphicContainer, new Insets(0, 8, 0, 8));
 
-        Pane divider = new Pane();
-        divider.setMinWidth(32);
+        Pane firstDivider = new Pane();
+        firstDivider.setMinWidth(12);
+        Pane secondDivider = new Pane();
+        secondDivider.setMinWidth(26);
 
         buttonsContainer.getChildren().setAll(graphicTextContainer);
+        buttonsContainer.getChildren().add(btnGithub);
+        buttonsContainer.getChildren().add(firstDivider);
         buttonsContainer.getChildren().add(btnTheme);
         buttonsContainer.getChildren().add(btnLanguage);
-        buttonsContainer.getChildren().add(divider);
+        buttonsContainer.getChildren().add(secondDivider);
         buttonsContainer.getChildren().addAll(btns);
         buttonsContainer.addEventHandler(MouseEvent.MOUSE_ENTERED, (enter) -> allowMove = true);
         buttonsContainer.addEventHandler(MouseEvent.MOUSE_EXITED, (enter) -> {
@@ -672,6 +684,10 @@ public class JFXCustomDecorator extends VBox {
 
     public void setOnThemeChangeActionRunnable(Runnable onThemeChangeActionRunnable) {
         this.onThemeChangeActionRunnable = onThemeChangeActionRunnable;
+    }
+
+    public void setOnGithubActionRunnable(Runnable onGithubActionRunnable) {
+        this.onGithubActionRunnable = onGithubActionRunnable;
     }
 
     public void setGraphic(Node node) {
