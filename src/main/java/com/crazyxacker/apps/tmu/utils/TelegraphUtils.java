@@ -111,7 +111,7 @@ public class TelegraphUtils {
 
                     TelegraphUtils.extractSrcUrlsFromResponse(response, imageUrls);
 
-                    Thread.sleep(500);
+                    Thread.sleep(700);
                 }
             }
 
