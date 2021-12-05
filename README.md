@@ -2,7 +2,7 @@
 
 App may be very helpful for content translators that searching easy way to share their work.
 
-##Features:
+## Features:
 - Very simple with clean UI
 - No Ads
 - Ability to set Title, Tags and Description for article
@@ -13,23 +13,23 @@ App may be very helpful for content translators that searching easy way to share
 - Support of **zip, rar, 7z, cbz, cbr, cb7** archives when running in **JVM** mode (from *.jar file)
 - Support of **zip, cbz** archives when running in **Native Image** mode (from native executable file)
 
-##Images:
+## Images:
 ![First](images/1.png)
 ![Second](images/2.png)
 ![Third](images/3.png)
 ![Fourth](images/4.png)
 ![Fifth](images/5.png)
 
-##Download:
+## Download:
 Navigate to Releases section and download latest version of app
 
-##Building:
+## Building:
 You will need [IntelliJ IDEA](https://www.jetbrains.com/) and [GraalVM CE 21.1.0](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-21.1.0) (**Java 11 based**)
 
 Open project in IDEA, navigate to ```build.gradle``` file and change variable `graalvmHome` to path to your GraalVM folder.
 Do this with `org.gradle.java.home` variable in `gradle.properties` file. Sync project
 
-###Building GraalVM Native Image executable:
+### Building GraalVM Native Image executable:
 **WARNING:** *you need at least 10GB of RAM to build native image! Native Build uses up to 8GB of RAM per build!*
 
 Follow [this guide](https://www.graalvm.org/reference-manual/native-image/) and install all dependencies for GraalVM to enable Native Image support.
@@ -48,7 +48,7 @@ On `Windows` it will be `TelegraphMangaUploader.exe` (non packed) and `TMU.exe` 
 
 On `Linux` it will be `TelegraphMangaUploader` (non packed. You can pack this file by yourself with UPX if you want)
 
-###Building JVM jar file:
+### Building JVM jar file:
 You also need [JavaFX 17 jmods](https://gluonhq.com/products/javafx//) runtime files places anywhere on your system
 
 Simply execute `shadowJar` task
