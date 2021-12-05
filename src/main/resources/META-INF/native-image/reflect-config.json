@@ -36,6 +36,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.crazyxacker.apps.tmu.adapters.StringListAdapter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.crazyxacker.apps.tmu.models.BookInfo",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -68,6 +72,18 @@
 {
   "name":"com.jfoenix.controls.JFXButton$ButtonType",
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.jfoenix.controls.JFXCheckBox",
+  "allDeclaredMethods":true,
+  "allPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.jfoenix.controls.JFXTextArea",
+  "allDeclaredMethods":true,
+  "allPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.jfoenix.controls.JFXTextField",
@@ -454,6 +470,10 @@
 {
   "name":"javafx.scene.control.TextInputControl",
   "allDeclaredMethods":true
+},
+{
+  "name":"javafx.scene.control.skin.TextAreaSkin",
+  "fields":[{"name":"promptNode"}]
 },
 {
   "name":"javafx.scene.control.skin.TextFieldSkin",
