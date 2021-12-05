@@ -97,6 +97,24 @@
 
 /*******************************************************
 *                           						   *
+* JFXTextArea                                          *
+*                          							   *
+*******************************************************/
+.text-area .content {
+    -fx-background-color: -fx-primary-color;
+}
+
+.text-area-transparent {
+    -fx-text-fill: -fx-accent-color;
+}
+
+.text-area-transparent .content {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-accent-color;
+}
+
+/*******************************************************
+*                           						   *
 * ScrollPane 	                                       *
 *                          							   *
 *******************************************************/
