@@ -1,5 +1,6 @@
 package com.crazyxacker.apps.tmu.utils;
 
+import com.crazyxacker.apps.tmu.Main;
 import com.crazyxacker.apps.tmu.controller.MainController;
 import com.crazyxacker.apps.tmu.controls.JFXCustomDecorator;
 import com.crazyxacker.apps.tmu.controls.JFXRoundedRippler;
@@ -122,6 +123,8 @@ public class FXUtils {
             Settings.putCurrentThemeDark(isSetThemeDark);
             MainController.showToast(LocaleManager.getString("gui.need_restart"));
         });
+
+        decorator.setOnGithubActionRunnable(() -> FXUtils.openURL(Main.APP_GITHUB_URL));
 
         if (withIcon) {
             decorator.setGraphic(createAppIconImageView(isDarkTheme));
