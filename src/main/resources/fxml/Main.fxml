@@ -30,19 +30,6 @@
                         </JFXTextField>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
-                    <children>
-                        <JFXTextField fx:id="tfTags" focusColor="#ffffff00" promptText="%gui.tags" style="-fx-text-fill: -fx-accent-color;"
-                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                            <HBox.margin>
-                                <Insets left="8.0" right="8.0"/>
-                            </HBox.margin>
-                        </JFXTextField>
-                    </children>
-                </HBox>
                 <HBox prefWidth="550.0" spacing="20.0">
                     <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
                         <children>
@@ -71,6 +58,41 @@
                         </children>
                     </HBox>
                 </HBox>
+                <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXTextField fx:id="tfTags" focusColor="#ffffff00" promptText="%gui.tags" style="-fx-text-fill: -fx-accent-color;"
+                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="8.0" right="8.0"/>
+                            </HBox.margin>
+                        </JFXTextField>
+                        <JFXCheckBox fx:id="cbPublishTags" text="%gui.publish" style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;">
+                            <HBox.margin>
+                                <Insets right="8.0"/>
+                            </HBox.margin>
+                        </JFXCheckBox>
+                    </children>
+                </HBox>
+                <VBox alignment="CENTER_RIGHT" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXTextArea fx:id="taDescription" focusColor="transparent" unFocusColor="transparent" maxHeight="200.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" promptText="%gui.description" labelFloat="false" styleClass="text-area-transparent">
+                            <font>
+                                <Font size="16.0"  />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="8.0" right="8.0"/>
+                            </VBox.margin>
+                        </JFXTextArea>
+                        <JFXCheckBox fx:id="cbPublishDescription" text="%gui.publish" style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;">
+                            <VBox.margin>
+                                <Insets top="8.0" bottom="8.0" right="8.0"/>
+                            </VBox.margin>
+                        </JFXCheckBox>
+                    </children>
+                </VBox>
                 <DragNDropFilesView fx:id="uploadFiles" prefHeight="250.0" prefWidth="550.0"
                                     chooserExtensionsFilterDescription="%gui.supported_formats"
                                     extensionsFilter="*.cbz,*.zip,*.cbr,*.rar,*.png,*.jpg,*.jpeg,*.gif,*.webp"
