@@ -56,14 +56,22 @@ public class TelegraphUtils {
         return true;
     }
 
-    public static String createPage(String title, String tags, List<String> images, String authorName, String authorLink) {
+    public static String createPage(String title, String tags, String description, List<String> images, String authorName, String authorLink) {
         List<Node> content = new ArrayList<>();
         if (StringUtils.isNotEmpty(tags)) {
             Node tagsParagraph = new NodeElement("p", new HashMap<>(), new ArrayList<>() {{
                 add(new NodeElement("b", new HashMap<>(), Collections.singletonList(new NodeText(LocaleManager.getString("gui.tags_node")))));
-                add(new NodeText(tags));
+                add(new NodeText(StringUtils.join(", ", ArrayUtils.splitString(tags, ","))));
             }});
             content.add(tagsParagraph);
+        }
+
+        if (StringUtils.isNotEmpty(description)) {
+            Node descriptionParagraph = new NodeElement("p", new HashMap<>(), new ArrayList<>() {{
+                add(new NodeElement("b", new HashMap<>(), Collections.singletonList(new NodeText(LocaleManager.getString("gui.description_node")))));
+                add(new NodeText(description));
+            }});
+            content.add(descriptionParagraph);
         }
 
         for (String image : images) {
