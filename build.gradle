@@ -97,6 +97,20 @@ jar {
     }
 }
 
+task nativePostBuild {
+    doLast {
+        exec {
+            workingDir "${projectDir}/tools"
+            executable "${workingDir}/set_native_image_icon.cmd"
+        }
+        exec {
+            workingDir "${projectDir}/tools"
+            executable "${workingDir}/upx_pack.cmd"
+        }
+    }
+}
+nativeBuild.dependsOn nativePostBuild
+
 run {
     new File(project.buildDir, "/resources/main/config.properties").delete()
     applicationDefaultJvmArgs = [
