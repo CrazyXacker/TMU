@@ -1,46 +1,44 @@
-<b>TMU</b> is very simple app for posting your digital manga (or any other image batch) as article into <b>Telegraph</b> for further reading using any browser or in <b>Telegram</b> with <b>Instant View</b>.
+**TMU** is very simple app for posting your digital manga (or any other image batch) as article into **Telegraph** for further reading using any browser or in **Telegram** with **Instant View**.
 
 App may be very helpful for content translators that searching easy way to share their work.
 
-<h2>Features:</h2>
-<ul>
-  <li>Very simple with clean UI</li>
-  <li>No Ads</li>
-  <li>Ability to set Title, Tags and Description for article</li>
-  <li>Upload batch of images or images from archive(s)</li>
-  <li>Read metadata info from <b>book_info.json</b> metadata file and autofill <b>Tags/Description</b> fields</li>
-  <li>Uploads history</li>
-  <li>Ability to copy prepared post for <b>Telegram</b> after posting to <b>Telegraph</b></li>
-  <li>Support of <b>zip, rar, 7z, cbz, cbr, cb7</b> archives when running in <b>JVM</b> mode (from *.jar file)</li>
-  <li>Support of <b>zip, cbz</b> archives when running in <b>Native Image</b> mode (from native executable file)</li>
-</ul>
+##Features:
+- Very simple with clean UI
+- No Ads
+- Ability to set Title, Tags and Description for article
+- Upload batch of images or images from archive(s)
+- Read metadata info from **book_info.json** metadata file and autofill **Tags/Description** fields
+- Uploads history
+- Ability to copy prepared post for **Telegram** after posting to **Telegraph**
+- Support of **zip, rar, 7z, cbz, cbr, cb7** archives when running in **JVM** mode (from *.jar file)
+- Support of **zip, cbz** archives when running in **Native Image** mode (from native executable file)
 
-<h2>Images:</h2>
+##Images:
 ![First](images/1.png)
 ![Second](images/2.png)
 ![Third](images/3.png)
 ![Fourth](images/4.png)
 ![Fifth](images/5.png)
 
-<h2>Download:</h2>
+##Download:
 Navigate to Releases section and download latest version of app
 
-<h2>Building:</h2>
-You will need [IntelliJ IDEA](https://www.jetbrains.com/) and [GraalVM CE 21.1.0](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-21.1.0) (<b>Java 11 based</b>)
+##Building:
+You will need [IntelliJ IDEA](https://www.jetbrains.com/) and [GraalVM CE 21.1.0](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-21.1.0) (**Java 11 based**)
 
 Open project in IDEA, navigate to ```build.gradle``` file and change variable `graalvmHome` to path to your GraalVM folder.
 Do this with `org.gradle.java.home` variable in `gradle.properties` file. Sync project
 
-<h3>Building GraalVM Native Image executable:</h3>
-<b>WARNING:</b> <i>you need at least 10GB of RAM to build native image! Native Build uses up to 8GB of RAM per build!</i>
+###Building GraalVM Native Image executable:
+**WARNING:** *you need at least 10GB of RAM to build native image! Native Build uses up to 8GB of RAM per build!*
 
 Follow [this guide](https://www.graalvm.org/reference-manual/native-image/) and install all dependencies for GraalVM to enable Native Image support.
 
-<b>WARNING:</b> <i>when installing VS Code build tools select English language for ALL packages that will be installed!</i>
+**WARNING:** *when installing VS Code build tools select English language for ALL packages that will be installed!*
 
-In <b>IDEA</b> navigate to `File` > `Setting` > `Tools` > `Terminal` > `Shell path`, clear this field and paste new path (change Visual Studio path if it's different): `cmd.exe /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat`. Hit `OK`
+In **IDEA** navigate to `File` > `Setting` > `Tools` > `Terminal` > `Shell path`, clear this field and paste new path (change Visual Studio path if it's different): `cmd.exe /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat`. Hit `OK`
 
-In <b>IDEA</b> on bottom bar click `Terminal`. If you see `[vcvarsall.bat] Environment initialized for: 'x{86 or 64}'` message, then all being setup correctly
+In **IDEA** on bottom bar click `Terminal`. If you see `[vcvarsall.bat] Environment initialized for: 'x{86 or 64}'` message, then all being setup correctly
 
 Just type `gradlew nativeBuild nativeRun` in that Terminal session, hit Enter and wait build finish. On `Ryzen 3600X` from HDD it takes around 2-3 minutes to finish
 
@@ -50,7 +48,7 @@ On `Windows` it will be `TelegraphMangaUploader.exe` (non packed) and `TMU.exe` 
 
 On `Linux` it will be `TelegraphMangaUploader` (non packed. You can pack this file by yourself with UPX if you want)
 
-<h3>Building JVM jar file:</h3>
+###Building JVM jar file:
 You also need [JavaFX 17 jmods](https://gluonhq.com/products/javafx//) runtime files places anywhere on your system
 
 Simply execute `shadowJar` task
