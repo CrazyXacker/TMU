@@ -1,15 +1,19 @@
 package com.crazyxacker.apps.tmu.models;
 
 import com.crazyxacker.apps.tmu.Main;
+import com.crazyxacker.apps.tmu.adapters.StringListAdapter;
 import com.crazyxacker.apps.tmu.utils.ArrayUtils;
 import com.crazyxacker.apps.tmu.utils.FileUtils;
 import com.crazyxacker.apps.tmu.utils.TypeUtils;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import lombok.Data;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +24,10 @@ import java.util.stream.Collectors;
 public class BookInfo {
     public static final String METADATA_FILE_NAME = "book_info.json";
 
+    @JsonAdapter(StringListAdapter.class)
     private List<String> genres;
     private List<String> tags;
+    private String description;
 
     public static BookInfo findInDirectory(String directory) {
         File bookInfoFile = FileUtils.getAllFilesFromDirectory(directory, new String[]{"json"}, true)
