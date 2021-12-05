@@ -13,6 +13,8 @@ import com.crazyxacker.apps.tmu.models.BookInfo;
 import com.crazyxacker.apps.tmu.models.UploadInfo;
 import com.crazyxacker.apps.tmu.utils.*;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Platform;
@@ -46,9 +48,15 @@ public class MainController {
     @FXML
     private JFXTextField tfTags;
     @FXML
+    private JFXCheckBox cbPublishTags;
+    @FXML
     private JFXTextField tfAuthor;
     @FXML
     private JFXTextField tfAuthorLink;
+    @FXML
+    private JFXCheckBox cbPublishDescription;
+    @FXML
+    private JFXTextArea taDescription;
     @FXML
     private DragNDropFilesView uploadFiles;
     @FXML
@@ -107,6 +115,9 @@ public class MainController {
             return;
         }
 
+        // Configure publish checkbox
+        configurePublishCheckBox();
+
         // Configure author fields
         configureAuthorFields();
 
@@ -135,6 +146,18 @@ public class MainController {
         FXUtils.requestFocus(root);
     }
 
+    private void configurePublishCheckBox() {
+        // Publish Tags
+        cbPublishTags.setSelected(Settings.getPublishTags());
+        cbPublishTags.selectedProperty().addListener((observable, oldValue, newValue) -> Settings.putPublishTags(newValue));
+        FXUtils.addTooltipToNode(cbPublishTags, LocaleManager.getString("gui.publish_tags_tooltip"), 14);
+
+        // Publish Description
+        cbPublishDescription.setSelected(Settings.getPublishDescription());
+        cbPublishDescription.selectedProperty().addListener((observable, oldValue, newValue) -> Settings.putPublishDescription(newValue));
+        FXUtils.addTooltipToNode(cbPublishDescription, LocaleManager.getString("gui.publish_description_tooltip"), 14);
+    }
+
     private void configureAuthorFields() {
         tfAuthor.setText(Settings.getAuthor());
         tfAuthorLink.setText(Settings.getAuthorLink());
@@ -154,6 +177,9 @@ public class MainController {
         uploadFiles.setCallback(new DragNDropFilesView.OnFilesSelected() {
             @Override
             public void onFilesSelected(List<File> selectedFiles, List<File> declinedFiles) {
+                tfTitle.clear();
+                tfTags.clear();
+
                 String firstFilePath = selectedFiles.get(0).toString();
                 tfTitle.setText(FileUtils.getFileName(firstFilePath));
             }
@@ -188,7 +214,7 @@ public class MainController {
         Platform.runLater(() -> {
             btnUpload.setOnAction(event -> {
                 interruptedProperty.setValue(true);
-                clear();
+                clearDragNDrop();
                 setUploadButtonUploadAction();
             });
             btnUpload.setText(LocaleManager.getString("gui.cancel"));
@@ -367,7 +393,14 @@ public class MainController {
 
         if (ArrayUtils.isNotEmpty(imageUrls)) {
             // Create page with image urls
-            String pageUrl = TelegraphUtils.createPage(tfTitle.getText(), tfTags.getText(), imageUrls, tfAuthor.getText(), tfAuthorLink.getText());
+            String pageUrl = TelegraphUtils.createPage(
+                    tfTitle.getText(),
+                    cbPublishTags.isSelected() ? tfTags.getText() : null,
+                    cbPublishDescription.isSelected() ? taDescription.getText() : null,
+                    imageUrls,
+                    tfAuthor.getText(),
+                    tfAuthorLink.getText()
+            );
 
             if (StringUtils.isNotEmpty(pageUrl)) {
                 Platform.runLater(() -> {
@@ -381,7 +414,7 @@ public class MainController {
                     createUploadInfo(tfTitle.getText(), pageUrl);
 
                     // Clear selected files in Drag'N'Drop and reset upload mode to hide progress bar
-                    clear();
+                    clearDragNDrop();
                 });
             }
 
@@ -407,6 +440,11 @@ public class MainController {
 
             // Join new tags set and set it into TextField
             tfTags.setText(StringUtils.join(", ", userTags));
+
+            // Set Description if present in BookInfo and not present by user
+            if (StringUtils.isNotEmpty(bookInfo.getDescription()) && StringUtils.isEmpty(taDescription.getText())) {
+                taDescription.setText(bookInfo.getDescription());
+            }
         }
     }
 
@@ -419,9 +457,7 @@ public class MainController {
         Settings.putPreviousUploadInfo(uploadInfoList);
     }
 
-    private void clear() {
-        tfTitle.clear();
-        tfTags.clear();
+    private void clearDragNDrop() {
         uploadFiles.setUploadMode(false);
         uploadFiles.clearSelectedFiles();
     }
@@ -441,6 +477,9 @@ public class MainController {
         tfTags.setDisable(disable);
         tfAuthor.setDisable(disable);
         tfAuthorLink.setDisable(disable);
+        taDescription.setDisable(disable);
+        cbPublishTags.setDisable(disable);
+        cbPublishDescription.setDisable(disable);
     }
 
     private void showError(String errorMessage) {
