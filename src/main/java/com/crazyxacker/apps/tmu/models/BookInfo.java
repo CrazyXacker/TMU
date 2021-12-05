@@ -37,7 +37,7 @@ public class BookInfo {
                 .orElse(null);
 
         if (FileUtils.isFileExist(bookInfoFile)) {
-            try (JsonReader reader = new JsonReader(new FileReader(bookInfoFile))) {
+            try (JsonReader reader = new JsonReader(new FileReader(bookInfoFile, StandardCharsets.UTF_8))) {
                 return Main.GSON.fromJson(reader, BookInfo.class);
             } catch (IOException ignored) {
             }
