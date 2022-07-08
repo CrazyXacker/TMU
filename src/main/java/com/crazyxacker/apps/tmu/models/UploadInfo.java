@@ -2,6 +2,7 @@ package com.crazyxacker.apps.tmu.models;
 
 import com.crazyxacker.apps.tmu.utils.ArrayUtils;
 import com.crazyxacker.apps.tmu.utils.StringUtils;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UploadInfo {
     private String title;
+    private List<String> titles;
     private List<String> links;
     private List<String> tags;
     private String description;

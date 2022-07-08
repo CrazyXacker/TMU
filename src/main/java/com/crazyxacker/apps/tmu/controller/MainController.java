@@ -284,9 +284,24 @@ public class MainController {
 
     private void configureCopyForTelegramMDIV() {
         spCopyForTelegram.setOnMouseClicked(event -> {
-            String clip = TelegramUtils.createTelegramPostText(tfTitle.getText(), tfTags.getText(), taDescription.getText(), tfUrl.getText());
-            FXUtils.copyToClipboard(clip);
-            showToast(LocaleManager.getString("gui.copied_to_clipboard"));
+            String firstUrl = ArrayUtils.splitString(tfUrl.getText(), ",")
+                    .stream()
+                    .map(String::trim)
+                    .limit(1)
+                    .findFirst()
+                    .orElse("");
+
+            UploadInfo uploadInfo = Settings.getPreviousUploadInfo()
+                    .stream()
+                    .filter(info -> info.getFirstLink().equalsIgnoreCase(firstUrl))
+                    .findFirst()
+                    .orElse(null);
+
+            if (uploadInfo != null) {
+                String clip = TelegramUtils.createTelegramPostText(uploadInfo);
+                FXUtils.copyToClipboard(clip);
+                showToast(LocaleManager.getString("gui.copied_to_clipboard"));
+            }
         });
         configureMDIV(spCopyForTelegram, mdivCopyForTelegram, LocaleManager.getString("gui.copy_to_clipboard_telegram"));
     }
@@ -475,6 +490,7 @@ public class MainController {
                     // Create new UploadInfo, add new Node into list and save Info list into Settings
                     createUploadInfo(
                             tfTitle.getText(),
+                            new ArrayList<>(imageUrls.keySet()),
                             pageUrls,
                             ArrayUtils.splitString(tfTags.getText(), ",")
                                     .stream()
@@ -515,8 +531,8 @@ public class MainController {
         }
     }
 
-    private void createUploadInfo(String title, List<String> links, List<String> tags, String description) {
-        UploadInfo uploadInfo = new UploadInfo(title, links, tags, description, System.currentTimeMillis());
+    private void createUploadInfo(String title, List<String> titles, List<String> links, List<String> tags, String description) {
+        UploadInfo uploadInfo = new UploadInfo(title, titles, links, tags, description, System.currentTimeMillis());
         UploadInfoCardController controller = createUploadInfoController(uploadInfo);
         vbUploads.getChildren().add(controller.getRootNode());
 
