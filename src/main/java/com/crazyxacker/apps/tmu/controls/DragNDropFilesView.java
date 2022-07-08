@@ -98,9 +98,15 @@ public class DragNDropFilesView extends VBox {
                 selectedFiles = Collections.singletonList(dir);
             }
         } else {
-            selectedFiles = FileDirChooserHelper.chooseFiles(chooserExtensionsFilterDescription.get(), ArrayUtils.splitString(extensionsFilter.get(), ","));
+            selectedFiles = FileDirChooserHelper.chooseFiles(this, chooserExtensionsFilterDescription.get(), ArrayUtils.splitString(extensionsFilter.get(), ","));
         }
 
+        onFilesSelected();
+        FXUtils.requestFocus(root);
+    }
+
+    public void onUploadedFiles(File file) {
+        selectedFiles = Collections.singletonList(file);
         onFilesSelected();
         FXUtils.requestFocus(root);
     }
