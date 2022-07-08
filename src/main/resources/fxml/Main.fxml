@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.crazyxacker.apps.tmu.controls.DragNDropFilesView?>
-
+<?import com.crazyxacker.apps.tmu.controls.EmptyView?>
 <?import com.jfoenix.controls.*?>
 <?import de.jensd.fx.glyphs.materialdesignicons.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
-<?import com.crazyxacker.apps.tmu.controls.EmptyView?>
-
 <StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="600.0" prefWidth="800.0"
-           style="-fx-background-color: -fx-primary-color;" xmlns="http://javafx.com/javafx/11.0.2"
+           style="-fx-background-color: -fx-primary-color;" xmlns="http://javafx.com/javafx/11.0.14-internal"
            fx:controller="com.crazyxacker.apps.tmu.controller.MainController">
     <BorderPane>
         <center>
             <VBox alignment="CENTER" fillWidth="false" spacing="20.0" BorderPane.alignment="CENTER">
                 <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextField fx:id="tfTitle" focusColor="#ffffff00" promptText="%gui.title" style="-fx-text-fill: -fx-accent-color;"
-                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                        <JFXTextField fx:id="tfTitle" focusColor="#ffffff00" promptText="%gui.title"
+                                      style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
+                                      HBox.hgrow="ALWAYS">
                             <font>
                                 <Font size="16.0"/>
                             </font>
@@ -33,8 +32,9 @@
                 <HBox prefWidth="550.0" spacing="20.0">
                     <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXTextField fx:id="tfAuthor" focusColor="#ffffff00" promptText="%gui.author" style="-fx-text-fill: -fx-accent-color;"
-                                          unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                            <JFXTextField fx:id="tfAuthor" focusColor="#ffffff00" promptText="%gui.author"
+                                          style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
+                                          HBox.hgrow="ALWAYS">
                                 <font>
                                     <Font size="16.0"/>
                                 </font>
@@ -46,8 +46,9 @@
                     </HBox>
                     <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXTextField fx:id="tfAuthorLink" focusColor="#ffffff00" promptText="%gui.author_link" style="-fx-text-fill: -fx-accent-color;"
-                                          unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                            <JFXTextField fx:id="tfAuthorLink" focusColor="#ffffff00" promptText="%gui.author_link"
+                                          style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
+                                          HBox.hgrow="ALWAYS">
                                 <font>
                                     <Font size="16.0"/>
                                 </font>
@@ -60,8 +61,9 @@
                 </HBox>
                 <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextField fx:id="tfTags" focusColor="#ffffff00" promptText="%gui.tags" style="-fx-text-fill: -fx-accent-color;"
-                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
+                        <JFXTextField fx:id="tfTags" focusColor="#ffffff00" promptText="%gui.tags"
+                                      style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
+                                      HBox.hgrow="ALWAYS">
                             <font>
                                 <Font size="16.0"/>
                             </font>
@@ -69,7 +71,9 @@
                                 <Insets left="8.0" right="8.0"/>
                             </HBox.margin>
                         </JFXTextField>
-                        <JFXCheckBox fx:id="cbPublishTags" text="%gui.publish" style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;">
+                        <JFXCheckBox fx:id="cbPublishTags"
+                                     style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;"
+                                     text="%gui.publish">
                             <HBox.margin>
                                 <Insets right="8.0"/>
                             </HBox.margin>
@@ -78,17 +82,21 @@
                 </HBox>
                 <VBox alignment="CENTER_RIGHT" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextArea fx:id="taDescription" focusColor="transparent" unFocusColor="transparent" maxHeight="200.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" promptText="%gui.description" labelFloat="false" styleClass="text-area-transparent">
+                        <JFXTextArea fx:id="taDescription" focusColor="transparent" labelFloat="false" maxHeight="200.0"
+                                     maxWidth="1.7976931348623157E308" prefHeight="200.0" promptText="%gui.description"
+                                     styleClass="text-area-transparent" unFocusColor="transparent">
                             <font>
-                                <Font size="16.0"  />
+                                <Font size="14.0"/>
                             </font>
                             <VBox.margin>
                                 <Insets left="8.0" right="8.0"/>
                             </VBox.margin>
                         </JFXTextArea>
-                        <JFXCheckBox fx:id="cbPublishDescription" text="%gui.publish" style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;">
+                        <JFXCheckBox fx:id="cbPublishDescription"
+                                     style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;"
+                                     text="%gui.publish">
                             <VBox.margin>
-                                <Insets top="8.0" bottom="8.0" right="8.0"/>
+                                <Insets bottom="8.0" right="8.0" top="8.0"/>
                             </VBox.margin>
                         </JFXCheckBox>
                     </children>
@@ -97,21 +105,38 @@
                                     chooserExtensionsFilterDescription="%gui.supported_formats"
                                     extensionsFilter="*.cbz,*.zip,*.cbr,*.rar,*.png,*.jpg,*.jpeg,*.gif,*.webp"
                                     BorderPane.alignment="CENTER"/>
-                <JFXButton fx:id="btnUpload" alignment="CENTER" buttonType="FLAT" minWidth="100.0" prefHeight="32.0"
-                           ripplerFill="WHITE" styleClass="button-colored-no-shadow" text="%gui.upload" style="-fx-text-fill: -fx-primary-color;"
-                           HBox.hgrow="ALWAYS">
-                    <graphic>
-                        <MaterialDesignIconView fx:id="mdivUpload" glyphName="UPLOAD" glyphStyle="-fx-fill: -fx-primary-color;"
-                                                size="16px"/>
-                    </graphic>
-                    <font>
-                        <Font size="16.0"/>
-                    </font>
-                </JFXButton>
-                <HBox fx:id="hbUrl" visible="false" managed="false" alignment="CENTER" prefWidth="550.0"
-                      styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" spacing="8.0">
                     <children>
-                        <JFXTextField fx:id="tfUrl" focusColor="#ffffff00" unFocusColor="#ffffff00" style="-fx-text-fill: -fx-accent-color;" HBox.hgrow="ALWAYS">
+                        <JFXButton fx:id="btnUpload" alignment="CENTER" buttonType="FLAT" minWidth="100.0"
+                                   prefHeight="32.0" ripplerFill="WHITE" style="-fx-text-fill: -fx-primary-color;"
+                                   styleClass="button-colored-no-shadow" text="%gui.upload" HBox.hgrow="ALWAYS">
+                            <graphic>
+                                <MaterialDesignIconView fx:id="mdivUpload" glyphName="UPLOAD"
+                                                        glyphStyle="-fx-fill: -fx-primary-color;" size="16px"/>
+                            </graphic>
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="btnUploadWithChapters" visible="false" managed="false" alignment="CENTER"
+                                   buttonType="FLAT" minWidth="100.0" prefHeight="32.0" ripplerFill="WHITE"
+                                   style="-fx-text-fill: -fx-primary-color;" styleClass="button-colored-no-shadow"
+                                   text="%gui.upload_with_chapters" HBox.hgrow="ALWAYS">
+                            <graphic>
+                                <MaterialDesignIconView fx:id="mdivUploadWithChapters" glyphName="UPLOAD"
+                                                        glyphStyle="-fx-fill: -fx-primary-color;" size="16px"/>
+                            </graphic>
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </JFXButton>
+                    </children>
+                </HBox>
+                <HBox fx:id="hbUrl" alignment="CENTER" managed="false" prefWidth="550.0"
+                      styleClass="border-colored-bold" visible="false" HBox.hgrow="ALWAYS">
+                    <children>
+                        <JFXTextField fx:id="tfUrl" focusColor="#ffffff00" style="-fx-text-fill: -fx-accent-color;"
+                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
                             <font>
                                 <Font size="16.0"/>
                             </font>
@@ -157,7 +182,7 @@
             </VBox>
         </center>
         <bottom>
-            <Label fx:id="lblError" managed="false" text="Label" style="-fx-text-fill: #e42121" visible="false"
+            <Label fx:id="lblError" managed="false" style="-fx-text-fill: #e42121" text="Label" visible="false"
                    BorderPane.alignment="CENTER">
                 <BorderPane.margin>
                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>

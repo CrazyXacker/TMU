@@ -12,6 +12,7 @@ import com.crazyxacker.apps.tmu.managers.Settings;
 import com.crazyxacker.apps.tmu.models.BookInfo;
 import com.crazyxacker.apps.tmu.models.UploadInfo;
 import com.crazyxacker.apps.tmu.utils.*;
+import com.crazyxacker.apps.tmu.utils.comparator.AlphanumComparator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextArea;
@@ -32,8 +33,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainController {
@@ -62,7 +62,11 @@ public class MainController {
     @FXML
     private JFXButton btnUpload;
     @FXML
+    private JFXButton btnUploadWithChapters;
+    @FXML
     private MaterialDesignIconView mdivUpload;
+    @FXML
+    private MaterialDesignIconView mdivUploadWithChapters;
     @FXML
     private HBox hbUrl;
     @FXML
@@ -180,8 +184,20 @@ public class MainController {
                 tfTitle.clear();
                 tfTags.clear();
 
-                String firstFilePath = selectedFiles.get(0).toString();
+                File firstFile = selectedFiles.get(0);
+                String firstFilePath = firstFile.toString();
                 tfTitle.setText(FileUtils.getFileName(firstFilePath));
+
+                // Read book_info.json metadata file if present
+                parseBookInfo(firstFile);
+
+                // Check if archives has chapters
+                boolean hasChapters = Optional.ofNullable(ArchiveUnpackerFactory.create(firstFile))
+                        .map(unpacker -> unpacker.isArchiveHasChapters(firstFile))
+                        .orElse(false);
+
+                FXUtils.setNodeVisible(btnUpload);
+                FXUtils.setNodeVisibleAndManagedFlag(hasChapters, btnUploadWithChapters);
             }
 
             @Override
@@ -200,9 +216,22 @@ public class MainController {
     private void setUploadButtonUploadAction() {
         // Set default onUpload action for upload button click
         Platform.runLater(() -> {
-            btnUpload.setOnAction(event -> onUpload());
+            FXUtils.setNodeVisible(btnUpload);
+            FXUtils.setNodeGone(btnUploadWithChapters);
+
+            btnUpload.setOnAction(event -> {
+                onUpload(false);
+                FXUtils.setNodeGone(btnUploadWithChapters);
+            });
             btnUpload.setText(LocaleManager.getString("gui.upload"));
             mdivUpload.setGlyphName("UPLOAD");
+
+            btnUploadWithChapters.setOnAction(event -> {
+                onUpload(true);
+                FXUtils.setNodeGone(btnUpload);
+            });
+            btnUploadWithChapters.setText(LocaleManager.getString("gui.upload_with_chapters"));
+            mdivUploadWithChapters.setGlyphName("UPLOAD");
 
             // Enable Title/Tags text fields
             disableTextFields(false);
@@ -219,6 +248,14 @@ public class MainController {
             });
             btnUpload.setText(LocaleManager.getString("gui.cancel"));
             mdivUpload.setGlyphName("STOP_CIRCLE_OUTLINE");
+
+            btnUploadWithChapters.setOnAction(event -> {
+                interruptedProperty.setValue(true);
+                clearDragNDrop();
+                setUploadButtonUploadAction();
+            });
+            btnUploadWithChapters.setText(LocaleManager.getString("gui.cancel"));
+            mdivUploadWithChapters.setGlyphName("STOP_CIRCLE_OUTLINE");
         });
     }
 
@@ -246,10 +283,7 @@ public class MainController {
 
     private void configureCopyForTelegramMDIV() {
         spCopyForTelegram.setOnMouseClicked(event -> {
-            String clip = StringUtils.isNotEmpty(tfTags.getText())
-                    ? String.format("%s\n\n%s\n\n%s", tfTitle.getText(), convertsTagsIntoHashtags(tfTags.getText()), tfUrl.getText())
-                    : String.format("%s\n\n%s", tfTitle.getText(), tfUrl.getText());
-
+            String clip = TelegramUtils.createTelegramPostText(tfTitle.getText(), tfTags.getText(), taDescription.getText(), tfUrl.getText());
             FXUtils.copyToClipboard(clip);
             showToast(LocaleManager.getString("gui.copied_to_clipboard"));
         });
@@ -300,7 +334,7 @@ public class MainController {
         return controller;
     }
 
-    private void onUpload() {
+    private void onUpload(boolean withChapters) {
         // Hide Page URL node and Error Label
         FXUtils.setNodeGone(hbUrl, lblError);
 
@@ -331,7 +365,7 @@ public class MainController {
                 }
 
                 // Upload all images into server
-                listAndUploadAllImages(images);
+                listAndUploadAllImages(images, withChapters);
             }).start();
         } else if (!uploadFiles.hasSelectedFiles()) {
             showError(LocaleManager.getString("gui.no_selected_files"));
@@ -376,42 +410,73 @@ public class MainController {
         return true;
     }
 
-    private void listAndUploadAllImages(List<File> images) {
-        // List all image files in temp dir after archives unpacking
-        images.addAll(FileUtils.getAllImagesFromDirectory(WorkspaceUtils.TMP_DIR, true));
-
-        // Read book_info.json metadata file if present
-        parseBookInfo();
-
-        // Upload all image files into server
-        List<String> imageUrls = TelegraphUtils.uploadImages(
+    private List<String> uploadImages(List<File> images) {
+        return TelegraphUtils.uploadImages(
                 images,
                 (fileName) -> uploadFiles.updateTaskNameLater(LocaleManager.getString("gui.uploading", fileName)),
                 (current, count) -> uploadFiles.updateProgressLater(null, current, count, null),
                 interruptedProperty
         );
+    }
+
+    private void listAndUploadAllImages(List<File> images, boolean withChapters) {
+        // List all image files in temp dir after archives unpacking
+        Map<String, List<String>> imageUrls = new TreeMap<>(new AlphanumComparator<>());
+        if (withChapters) {
+            File[] archiveDirectories = new File(WorkspaceUtils.TMP_DIR).listFiles(File::isDirectory);
+            for (File archiveDirectory : archiveDirectories) {
+                File[] chapterDirectories = archiveDirectory.listFiles(File::isDirectory);
+                // For first chapter add all images from root archive directory
+                images.addAll(FileUtils.getAllImagesFromDirectory(archiveDirectory.toString(), false));
+
+                for (File chapterDirectory : chapterDirectories) {
+                    // List all files in chapter directory
+                    images.addAll(FileUtils.getAllImagesFromDirectory(chapterDirectory.toString(), true));
+
+                    // Upload all image files into server
+                    imageUrls.put(chapterDirectory.getName(), uploadImages(images));
+                    images.clear();
+                }
+            }
+        } else {
+            images.addAll(FileUtils.getAllImagesFromDirectory(WorkspaceUtils.TMP_DIR, true));
+
+            // Upload all image files into server
+            imageUrls.put(tfTitle.getText(), uploadImages(images));
+        }
 
         if (ArrayUtils.isNotEmpty(imageUrls)) {
-            // Create page with image urls
-            String pageUrl = TelegraphUtils.createPage(
-                    tfTitle.getText(),
-                    cbPublishTags.isSelected() ? tfTags.getText() : null,
-                    cbPublishDescription.isSelected() ? taDescription.getText() : null,
-                    imageUrls,
-                    tfAuthor.getText(),
-                    tfAuthorLink.getText()
-            );
+            List<String> pageUrls = imageUrls.entrySet()
+                    .stream()
+                    .map(entry -> TelegraphUtils.createPage(
+                            entry.getKey(),
+                            cbPublishTags.isSelected() && !withChapters ? tfTags.getText() : null,
+                            cbPublishDescription.isSelected() && !withChapters ? taDescription.getText() : null,
+                            entry.getValue(),
+                            tfAuthor.getText(),
+                            tfAuthorLink.getText()
+                    ))
+                    .collect(Collectors.toList());
 
-            if (StringUtils.isNotEmpty(pageUrl)) {
+            if (ArrayUtils.isNotEmpty(pageUrls)) {
                 Platform.runLater(() -> {
                     // Set Page URL into TextField
-                    tfUrl.setText(pageUrl);
+                    tfUrl.setText(StringUtils.join(", ", pageUrls));
 
                     // Show Page URL node
                     FXUtils.setNodeVisible(hbUrl);
 
                     // Create new UploadInfo, add new Node into list and save Info list into Settings
-                    createUploadInfo(tfTitle.getText(), pageUrl);
+                    createUploadInfo(
+                            tfTitle.getText(),
+                            pageUrls,
+                            ArrayUtils.splitString(tfTags.getText(), ",")
+                                    .stream()
+                                    .map(String::trim)
+                                    .collect(Collectors.toList()),
+                            taDescription.getText()
+                    );
+
 
                     // Clear selected files in Drag'N'Drop and reset upload mode to hide progress bar
                     clearDragNDrop();
@@ -424,8 +489,8 @@ public class MainController {
         }
     }
 
-    private void parseBookInfo() {
-        BookInfo bookInfo = BookInfo.findInDirectory(WorkspaceUtils.TMP_DIR);
+    private void parseBookInfo(File archiveFile) {
+        BookInfo bookInfo = BookInfo.findInArchive(archiveFile);
         if (bookInfo != null) {
             // Split user defined tags into set
             Set<String> userTags = ArrayUtils.splitString(tfTags.getText(), ",")
@@ -448,8 +513,8 @@ public class MainController {
         }
     }
 
-    private void createUploadInfo(String title, String link) {
-        UploadInfo uploadInfo = new UploadInfo(title, link, System.currentTimeMillis());
+    private void createUploadInfo(String title, List<String> links, List<String> tags, String description) {
+        UploadInfo uploadInfo = new UploadInfo(title, links, tags, description, System.currentTimeMillis());
         UploadInfoCardController controller = createUploadInfoController(uploadInfo);
         vbUploads.getChildren().add(controller.getRootNode());
 
@@ -462,12 +527,14 @@ public class MainController {
         uploadFiles.clearSelectedFiles();
     }
 
-    private String convertsTagsIntoHashtags(String tagsString) {
+    public static String convertsTagsIntoHashtags(String tagsString) {
         return ArrayUtils.splitString(tagsString, ",")
                 .stream()
                 .map(String::trim)
                 .filter(StringUtils::isNotEmpty)
-                .map(tag -> tag.replace(" ", "_").replace("-", "_"))
+                .map(tag -> tag.replace(" ", "_"))
+                .map(tag -> tag.replace("-", "_"))
+                .map(tag -> tag.replace("/", ""))
                 .map(tag -> "#" + tag)
                 .collect(Collectors.joining(", "));
     }

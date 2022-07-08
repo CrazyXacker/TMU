@@ -147,6 +147,23 @@ class SevenZip implements IArchiveUnpacker {
         return entry.getSize();
     }
 
+    public int getDirectoriesCount() {
+        try {
+            return (int) Arrays.stream(inArchive.getSimpleInterface().getArchiveItems())
+                    .filter(it -> {
+                        try {
+                            return it.isFolder();
+                        } catch (SevenZipException e) {
+                            return false;
+                        }
+                    })
+                    .count();
+        } catch (SevenZipException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public String getEntryName() {
         try {
             return entry.getPath();

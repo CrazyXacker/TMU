@@ -1,51 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<StackPane fx:id="root" minHeight="62.0" prefHeight="62.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.crazyxacker.apps.tmu.controller.cards.UploadInfoCardController">
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Tooltip?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" minHeight="62.0" prefHeight="62.0" HBox.hgrow="ALWAYS"
+           xmlns="http://javafx.com/javafx/11.0.2"
+           fx:controller="com.crazyxacker.apps.tmu.controller.cards.UploadInfoCardController">
     <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="40.0" HBox.hgrow="ALWAYS">
         <StackPane fx:id="pane" styleClass="border-transparent" HBox.hgrow="ALWAYS">
-            <Pane fx:id="pRippler" />
+            <Pane fx:id="pRippler"/>
             <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                 <HBox.margin>
-                    <Insets bottom="3.0" left="8.0" top="3.0" />
+                    <Insets bottom="3.0" left="8.0" top="3.0"/>
                 </HBox.margin>
                 <Label fx:id="lblTitle" maxWidth="1.7976931348623157E308" text="Title">
                     <font>
-                        <Font size="15.0" />
+                        <Font size="15.0"/>
                     </font>
                 </Label>
-                <Label fx:id="lblLink" layoutX="10.0" layoutY="30.0" maxWidth="1.7976931348623157E308" text="https://telegra.ph/" />
-                <Label fx:id="lblDate" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" text="02.12.2021">
+                <Label fx:id="lblLink" layoutX="10.0" layoutY="30.0" maxWidth="1.7976931348623157E308"
+                       text="https://telegra.ph/"/>
+                <Label fx:id="lblDate" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308"
+                       text="02.12.2021">
                     <font>
-                        <Font size="11.0" />
+                        <Font size="11.0"/>
                     </font>
                 </Label>
                 <StackPane.margin>
-                    <Insets />
+                    <Insets/>
                 </StackPane.margin>
                 <padding>
-                    <Insets bottom="2.0" left="4.0" top="2.0" />
+                    <Insets bottom="2.0" left="4.0" top="2.0"/>
                 </padding>
             </VBox>
         </StackPane>
-        <JFXButton fx:id="btnRemove" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="36.0" ripplerFill="#00853e" styleClass="border-transparent" text=" ">
+        <JFXButton fx:id="btnCopyForTelegram" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="36.0"
+                   ripplerFill="#00853e" styleClass="border-transparent" text=" ">
             <graphic>
-                <MaterialDesignIconView glyphName="CLOSE" glyphStyle="-fx-fill: -fx-accent-color;" size="22px" />
+                <MaterialDesignIconView glyphName="TELEGRAM" glyphStyle="-fx-fill: -fx-accent-color;" size="22px"/>
             </graphic>
+            <tooltip>
+                <Tooltip text="%gui.copy_to_clipboard_telegram"/>
+            </tooltip>
             <HBox.margin>
-                <Insets bottom="2.0" left="2.0" right="6.0" top="2.0" />
+                <Insets bottom="2.0" left="2.0" right="6.0" top="2.0"/>
             </HBox.margin>
             <font>
-                <Font size="13.0" />
+                <Font size="13.0"/>
             </font>
             <padding>
-                <Insets bottom="4.0" top="4.0" />
+                <Insets bottom="4.0" top="4.0"/>
+            </padding>
+        </JFXButton>
+        <JFXButton fx:id="btnCopyLink" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="36.0"
+                   ripplerFill="#00853e" styleClass="border-transparent" text=" ">
+            <graphic>
+                <MaterialDesignIconView glyphName="CONTENT_COPY" glyphStyle="-fx-fill: -fx-accent-color;" size="22px"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="%gui.copy_to_clipboard"/>
+            </tooltip>
+            <HBox.margin>
+                <Insets bottom="2.0" left="2.0" right="6.0" top="2.0"/>
+            </HBox.margin>
+            <font>
+                <Font size="13.0"/>
+            </font>
+            <padding>
+                <Insets bottom="4.0" top="4.0"/>
+            </padding>
+        </JFXButton>
+        <JFXButton fx:id="btnOpenInBrowser" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="36.0"
+                   ripplerFill="#00853e" styleClass="border-transparent" text=" ">
+            <graphic>
+                <MaterialDesignIconView glyphName="WEB" glyphStyle="-fx-fill: -fx-accent-color;" size="22px"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="%gui.open_in_browser"/>
+            </tooltip>
+            <HBox.margin>
+                <Insets bottom="2.0" left="2.0" right="6.0" top="2.0"/>
+            </HBox.margin>
+            <font>
+                <Font size="13.0"/>
+            </font>
+            <padding>
+                <Insets bottom="4.0" top="4.0"/>
+            </padding>
+        </JFXButton>
+        <JFXButton fx:id="btnRemove" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="36.0"
+                   ripplerFill="#00853e" styleClass="border-transparent" text=" ">
+            <graphic>
+                <MaterialDesignIconView glyphName="CLOSE" glyphStyle="-fx-fill: -fx-accent-color;" size="22px"/>
+            </graphic>
+            <HBox.margin>
+                <Insets bottom="2.0" left="2.0" right="6.0" top="2.0"/>
+            </HBox.margin>
+            <font>
+                <Font size="13.0"/>
+            </font>
+            <padding>
+                <Insets bottom="4.0" top="4.0"/>
             </padding>
         </JFXButton>
     </HBox>

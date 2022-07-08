@@ -1,6 +1,7 @@
 package com.crazyxacker.apps.tmu.archive;
 
 import com.crazyxacker.apps.tmu.utils.FileUtils;
+import com.crazyxacker.apps.tmu.utils.StringUtils;
 import javafx.beans.property.BooleanProperty;
 import net.sf.sevenzipjbinding.SevenZipException;
 import org.apache.commons.io.IOUtils;
@@ -21,6 +22,7 @@ import java.util.zip.ZipFile;
 class Zip implements IArchiveUnpacker {
     private String archivePath;
     private ZipFile zipFile;
+    private List<? extends ZipEntry> entries;
     private ListIterator<? extends ZipEntry> iterator;
     private ZipEntry entry;
     private int countFiles;
@@ -116,7 +118,7 @@ class Zip implements IArchiveUnpacker {
 
     @Override
     public void reset() {
-        List<? extends ZipEntry> entries = Collections.list(zipFile.entries());
+        entries = Collections.list(zipFile.entries());
         countFiles = entries.size();
 
         iterator = entries.stream()
@@ -138,6 +140,16 @@ class Zip implements IArchiveUnpacker {
     @Override
     public long getEntrySize() {
         return entry.getSize();
+    }
+
+    @Override
+    public int getDirectoriesCount() {
+        return entries.stream()
+                .map(ZipEntry::getName)
+                .map(FileUtils::getPath)
+                .filter(StringUtils::isNotEmpty)
+                .collect(Collectors.toSet())
+                .size();
     }
 
     @Override
