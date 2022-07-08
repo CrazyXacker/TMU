@@ -50,5 +50,6 @@ Thumbs.db
 
 app.properties
 .gradle/
-build/client/x86_64-windows/gvm/log/client-debug0.log.13
-build/client/x86_64-windows/
+tmp/
+build/
+RUNNING_PID

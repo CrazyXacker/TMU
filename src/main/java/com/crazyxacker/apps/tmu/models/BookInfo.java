@@ -1,34 +1,29 @@
 package com.crazyxacker.apps.tmu.models;
 
 import com.crazyxacker.apps.tmu.Main;
-import com.crazyxacker.apps.tmu.adapters.StringListAdapter;
+import com.crazyxacker.apps.tmu.archive.ArchiveUnpackerFactory;
+import com.crazyxacker.apps.tmu.archive.IArchiveUnpacker;
+import com.crazyxacker.apps.tmu.managers.LocaleManager;
 import com.crazyxacker.apps.tmu.utils.ArrayUtils;
 import com.crazyxacker.apps.tmu.utils.FileUtils;
-import com.crazyxacker.apps.tmu.utils.TypeUtils;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import lombok.Data;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
 public class BookInfo {
     public static final String METADATA_FILE_NAME = "book_info.json";
 
-    @JsonAdapter(StringListAdapter.class)
-    private List<String> genres;
+    private List<Integer> genres;
     private List<String> tags;
     private String description;
 
+    @Nullable
     public static BookInfo findInDirectory(String directory) {
         File bookInfoFile = FileUtils.getAllFilesFromDirectory(directory, new String[]{"json"}, true)
                 .stream()
@@ -36,11 +31,55 @@ public class BookInfo {
                 .findAny()
                 .orElse(null);
 
-        if (FileUtils.isFileExist(bookInfoFile)) {
-            try (JsonReader reader = new JsonReader(new FileReader(bookInfoFile, StandardCharsets.UTF_8))) {
-                return Main.GSON.fromJson(reader, BookInfo.class);
-            } catch (IOException ignored) {
+        return Optional.ofNullable(bookInfoFile)
+                .filter(FileUtils::isFileExist)
+                .map(file -> {
+                    try {
+                        return new FileReader(bookInfoFile, StandardCharsets.UTF_8);
+                    } catch (IOException e) {
+                        return null;
+                    }
+                })
+                .map(BookInfo::readJsonFromReader)
+                .orElse(null);
+    }
+
+    @Nullable
+    public static BookInfo findInArchive(File archiveFile) {
+        InputStream is = null;
+        IArchiveUnpacker unpacker = ArchiveUnpackerFactory.create(archiveFile);
+        try {
+            unpacker.open(archiveFile.toString());
+
+            return Optional.ofNullable(is = findBookInfoStreamInArchive(unpacker))
+                    .map(InputStreamReader::new)
+                    .map(BookInfo::readJsonFromReader)
+                    .orElse(null);
+        } catch (Exception ignored) {
+        } finally {
+            FileUtils.closeQuietly(is);
+            FileUtils.closeQuietly(unpacker);
+        }
+        return null;
+    }
+
+    @Nullable
+    private static InputStream findBookInfoStreamInArchive(IArchiveUnpacker unpacker) throws IOException {
+        while (unpacker.next()) {
+            if (unpacker.getEntryName().toLowerCase().endsWith(METADATA_FILE_NAME)) {
+                return unpacker.getEntryInputStream();
             }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static BookInfo readJsonFromReader(Reader reader) {
+        try (JsonReader jsonReader = new JsonReader(reader)) {
+            return Main.GSON.fromJson(jsonReader, BookInfo.class);
+        } catch (IOException ignored) {
+        } finally {
+            FileUtils.closeQuietly(reader);
         }
         return null;
     }
@@ -48,9 +87,12 @@ public class BookInfo {
     public List<String> getGenres() {
         if (ArrayUtils.isNotEmpty(genres)) {
             return genres.stream()
-                    .map(Genre::getGenreFromString)
+                    .map(Genre::getGenreFromInt)
                     .filter(Objects::nonNull)
                     .map(Enum::name)
+                    .map(String::toLowerCase)
+                    .map(name -> "genre_" + name)
+                    .map(LocaleManager::getString)
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();
@@ -126,20 +168,17 @@ public class BookInfo {
         static final String[] YuriArr;
         static HashMap<Genre, String[]> MangaGenreStr;
 
-        public static Genre getGenreFromString(String genreStr) {
-            genreStr = genreStr.toLowerCase().trim();
-            Genre result = null;
-
-            int n = TypeUtils.getIntDef(genreStr, -1);
-            if (n >= 0 && n < Genre.values().length) {
-                result = Genre.values()[n];
+        @Nullable
+        public static Genre getGenreFromInt(int genreInt) {
+            if (genreInt >= 0 && genreInt < Genre.values().length) {
+                return Genre.values()[genreInt];
             }
 
-            return result;
+            return null;
         }
 
         static {
-            ActionArr = new String[] {
+            ActionArr = new String[]{
                     "action",
                     "acción",
                     "live action",
@@ -152,7 +191,7 @@ public class BookInfo {
                     "бойовик"
             };
 
-            AdultArr = new String[] {
+            AdultArr = new String[]{
                     "adult",
                     "mature",
                     "erotica",
@@ -173,7 +212,7 @@ public class BookInfo {
                     "для дорослих"
             };
 
-            AdventureArr = new String[] {
+            AdventureArr = new String[]{
                     "adventure",
                     "aventure",
                     "aventura",
@@ -184,7 +223,7 @@ public class BookInfo {
                     "пригоди"
             };
 
-            ComedyArr = new String[] {
+            ComedyArr = new String[]{
                     "comedy",
                     "comédie",
                     "comédia",
@@ -198,14 +237,14 @@ public class BookInfo {
                     "комедії"
             };
 
-            DoujinshiArr = new String[] {
+            DoujinshiArr = new String[]{
                     "doujinshi",
                     "hentai",
                     "dounshinji",
                     "додзинси"
             };
 
-            DramaArr = new String[] {
+            DramaArr = new String[]{
                     "drama",
                     "drame",
                     "drammatico",
@@ -213,7 +252,7 @@ public class BookInfo {
                     "драма"
             };
 
-            EcchiArr = new String[] {
+            EcchiArr = new String[]{
                     "ecchi",
                     "إيتشي",
                     "eichii",
@@ -222,7 +261,7 @@ public class BookInfo {
                     "еччі"
             };
 
-            FantasyArr = new String[] {
+            FantasyArr = new String[]{
                     "fantasy",
                     "fantaisie",
                     "fantasía",
@@ -237,7 +276,7 @@ public class BookInfo {
                     "фентезі"
             };
 
-            GenderBenderArr = new String[] {
+            GenderBenderArr = new String[]{
                     "gender bender",
                     "sexedit",
                     "gender intriga",
@@ -246,14 +285,14 @@ public class BookInfo {
                     "гендерная интрига"
             };
 
-            HaremArr = new String[] {
+            HaremArr = new String[]{
                     "harem",
                     "harén",
                     "harém",
                     "гарем"
             };
 
-            HistoricalArr = new String[] {
+            HistoricalArr = new String[]{
                     "historical",
                     "historic",
                     "historique",
@@ -266,7 +305,7 @@ public class BookInfo {
                     "історія"
             };
 
-            HorrorArr = new String[] {
+            HorrorArr = new String[]{
                     "horror",
                     "horreur",
                     "رعب",
@@ -275,21 +314,21 @@ public class BookInfo {
                     "жахи"
             };
 
-            JoseiArr = new String[] {
+            JoseiArr = new String[]{
                     "josei",
                     "dsesay",
                     "جوسيّ",
                     "дзёсэй"
             };
 
-            MagicArr = new String[] {
+            MagicArr = new String[]{
                     "magic",
                     "magico",
                     "magia",
                     "магия"
             };
 
-            MartialArtsArr = new String[] {
+            MartialArtsArr = new String[]{
                     "martial arts",
                     "fightskill",
                     "arts martiaux",
@@ -303,12 +342,12 @@ public class BookInfo {
                     "бойове мистецтво"
             };
 
-            MechaArr = new String[] {
+            MechaArr = new String[]{
                     "mecha",
                     "меха"
             };
 
-            MysteryArr = new String[] {
+            MysteryArr = new String[]{
                     "mystery",
                     "mystère",
                     "misterio",
@@ -319,13 +358,13 @@ public class BookInfo {
                     "містика"
             };
 
-            OneShotArr = new String[] {
+            OneShotArr = new String[]{
                     "one shot",
                     "فصل واحد",
                     "ваншот"
             };
 
-            PsychologicalArr = new String[] {
+            PsychologicalArr = new String[]{
                     "psychological",
                     "psycho",
                     "psicologico",
@@ -336,7 +375,7 @@ public class BookInfo {
                     "психологическое"
             };
 
-            RomanceArr = new String[] {
+            RomanceArr = new String[]{
                     "romance",
                     "romantica",
                     "romantico",
@@ -349,7 +388,7 @@ public class BookInfo {
                     "шмарклі"
             };
 
-            SchoolLifeArr = new String[] {
+            SchoolLifeArr = new String[]{
                     "school life",
                     "school",
                     "vie scolaire",
@@ -361,7 +400,7 @@ public class BookInfo {
                     "школа"
             };
 
-            SciFiArr = new String[] {
+            SciFiArr = new String[]{
                     "sci fi",
                     "scifi",
                     "fantastic",
@@ -377,7 +416,7 @@ public class BookInfo {
                     "фантастика"
             };
 
-            SeinenArr = new String[] {
+            SeinenArr = new String[]{
                     "seinen",
                     "سيّنين",
                     "сэйнэн",
@@ -385,7 +424,7 @@ public class BookInfo {
                     "шьонен"
             };
 
-            ShoujoArr = new String[] {
+            ShoujoArr = new String[]{
                     "shoujo",
                     "shojo",
                     "shōjo",
@@ -395,13 +434,13 @@ public class BookInfo {
                     "шьоджьо"
             };
 
-            ShoujoAiArr = new String[] {
+            ShoujoAiArr = new String[]{
                     "shoujo ai",
                     "shoujoai",
                     "сёдзё ай",
                     "шьоджьо aї"
             };
-            ShounenArr = new String[] {
+            ShounenArr = new String[]{
                     "shounen",
                     "shonen",
                     "shonem",
@@ -412,7 +451,7 @@ public class BookInfo {
                     "сёнен"
             };
 
-            ShounenAiArr = new String[] {
+            ShounenAiArr = new String[]{
                     "shounen ai",
                     "shounenai",
                     "сёнэн ай",
@@ -420,7 +459,7 @@ public class BookInfo {
                     "шьонен aї"
             };
 
-            SliceOfLifeArr = new String[] {
+            SliceOfLifeArr = new String[]{
                     "slice of life",
                     "natural",
                     "routine",
@@ -434,7 +473,7 @@ public class BookInfo {
                     "повседневность",
                     "буденність"
             };
-            SportsArr = new String[] {
+            SportsArr = new String[]{
                     "sports",
                     "sport",
                     "deporte",
@@ -446,7 +485,7 @@ public class BookInfo {
                     "спорт"
             };
 
-            SupernaturalArr = new String[] {
+            SupernaturalArr = new String[]{
                     "supernatural",
                     "surnaturel",
                     "sobrenatural",
@@ -458,7 +497,7 @@ public class BookInfo {
                     "надприродне"
             };
 
-            TragedyArr = new String[] {
+            TragedyArr = new String[]{
                     "tragedy",
                     "tragédie",
                     "tragedia",
@@ -468,12 +507,12 @@ public class BookInfo {
                     "трагедия"
             };
 
-            YaoiArr = new String[] {
+            YaoiArr = new String[]{
                     "yaoi",
                     "яой"
             };
 
-            YuriArr = new String[] {
+            YuriArr = new String[]{
                     "yuri",
                     "юри"
             };

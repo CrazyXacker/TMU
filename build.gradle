@@ -2,12 +2,14 @@ buildscript {
     repositories {
         maven { url "https://nexus.gluonhq.com/nexus/content/repositories/releases"}
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://sandec.jfrog.io/artifactory/repo" }
     }
     dependencies {
         classpath "com.github.jengelman.gradle.plugins:shadow:5.2.0"
         classpath "io.franzbecker:gradle-lombok:4.0.0"
         classpath 'org.openjfx:javafx-plugin:0.0.10'
         classpath 'com.gluonhq:client-gradle-plugin:0.1.42'
+        classpath 'com.sandec.jpro:jpro-plugin-gradle:2022.1.0'
     }
 }
 
@@ -19,9 +21,10 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: 'org.openjfx.javafxplugin'
 apply plugin: 'com.gluonhq.client-gradle-plugin'
+apply plugin: 'com.sandec.jpro'
 
 group 'com.crazyxacker.apps.tmu'
-version '1.0'
+version '1.1'
 applicationName = 'TelegraphMangaUploader'
 mainClassName = 'com.crazyxacker.apps.tmu.Main'
 compileJava.options.encoding = 'UTF-8'
@@ -33,6 +36,16 @@ repositories {
     jcenter()
     maven { url 'https://jitpack.io' }
     maven { url 'https://nexus.gluonhq.com/nexus/content/repositories/releases/' }
+}
+
+jpro {
+    // for debugging
+    // JVMArgs << '-agentlib:jdwp=transport=dt_socket,server=n,address=5006,suspend=y'
+
+    JVMArgs << '-Xmx1000m'
+
+    //jpro server port
+    port = 8082
 }
 
 gluonClient {

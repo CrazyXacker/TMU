@@ -16,6 +16,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
 public class Main extends Application {
+    public static final String APP_VERSION = "v1.1";
     public static final String APP_NAME = "TelegraphMangaUploader";
     public static final String APP_GITHUB_URL = "https://github.com/CrazyXacker/TMU";
     public static final Gson GSON;
@@ -23,6 +24,12 @@ public class Main extends Application {
     private static Stage currentStage;
 
     public static void main(String[] args) {
+        // Launch JavaFX App
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) {
         // Load settings file
         Settings.init();
 
@@ -36,12 +43,6 @@ public class Main extends Application {
         // Set up Telegraph logger
         setUpTelegraphLogger();
 
-        // Launch JavaFX App
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage stage) {
         // Load main FXML layout
         Node rootNode = FXUtils.loadFXML("/fxml/Main.fxml").getKey();
 
@@ -49,7 +50,7 @@ public class Main extends Application {
         Scene scene = FXUtils.createDecorator(stage, rootNode, 1100, 850, true, Settings.isCurrentThemeDark(), null);
 
         // Configuring Stage with title, min width/height
-        stage.setTitle(APP_NAME);
+        stage.setTitle(String.format("%s (%s)", APP_NAME, APP_VERSION));
         stage.setMinWidth(800);
         stage.setMinHeight(600);
 
