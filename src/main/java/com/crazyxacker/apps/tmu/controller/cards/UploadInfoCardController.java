@@ -84,7 +84,7 @@ public class UploadInfoCardController {
 
         // Copy post for Telegram
         btnCopyForTelegram.setOnMouseClicked(event -> {
-            String clip = TelegramUtils.createTelegramPostText(uploadInfo.getTitle(), StringUtils.join(",", uploadInfo.getTags()), uploadInfo.getDescription(), uploadInfo.getLinksCommaSeparated());
+            String clip = TelegramUtils.createTelegramPostText(uploadInfo);
             FXUtils.copyToClipboard(clip);
             MainController.showToast(LocaleManager.getString("gui.copied_to_clipboard"));
         });
