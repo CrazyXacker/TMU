@@ -11,7 +11,9 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +27,9 @@ public class Settings {
 
     public static void init() {
         properties = new Properties();
-        try (FileInputStream fis = new FileInputStream(WorkspaceUtils.WORKING_DIR + PROPERTIES_FILENAME)) {
-            properties.load(fis);
+        try (FileInputStream fis = new FileInputStream(WorkspaceUtils.WORKING_DIR + PROPERTIES_FILENAME);
+             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+            properties.load(isr);
         } catch (IOException e) {
             System.err.println("Unable to load " + PROPERTIES_FILENAME);
         }

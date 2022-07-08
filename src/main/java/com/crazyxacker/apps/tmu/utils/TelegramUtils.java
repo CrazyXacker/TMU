@@ -2,6 +2,8 @@ package com.crazyxacker.apps.tmu.utils;
 
 import com.crazyxacker.apps.tmu.controller.MainController;
 
+import java.util.stream.Collectors;
+
 public class TelegramUtils {
 
     public static String createTelegramPostText(String title, String tags, String description, String url) {
@@ -10,7 +12,11 @@ public class TelegramUtils {
                 ? String.format("\n\n__%s%s__", description.substring(0, 700), (addEllipsize ? "..." : ""))
                 : "";
 
-        String linksNewLineSeparated = StringUtils.join("\n", ArrayUtils.splitString(url, ", "));
+        String linksNewLineSeparated = ArrayUtils.splitString(url, ",")
+                .stream()
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+
         return StringUtils.isNotEmpty(tags)
                 ? String.format("**%s**\n\n%s%s\n\n%s", title, MainController.convertsTagsIntoHashtags(tags), newDescription, linksNewLineSeparated)
                 : String.format("**%s**\n\n%s%s", title, newDescription, url);

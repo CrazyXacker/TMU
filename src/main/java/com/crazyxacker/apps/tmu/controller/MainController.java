@@ -202,6 +202,7 @@ public class MainController {
 
             @Override
             public void onFilesCleared() {
+                WorkspaceUtils.clearTempDir();
             }
         });
     }
@@ -350,9 +351,6 @@ public class MainController {
             disableTextFields(true);
 
             new Thread(() -> {
-                // Clear temp directory
-                WorkspaceUtils.clearTempDir();
-
                 // List all selected image files from Drag'N'Drop view
                 List<File> images = uploadFiles.getSelectedFiles()
                         .stream()
@@ -361,11 +359,16 @@ public class MainController {
 
                 // Unpack all selected archives from Drag'N'Drop view. Interrupt execution if unpack error occurred
                 if (!unpackArchivesIfPresent()) {
+                    // Clear temp directory
+                    WorkspaceUtils.clearTempDir();
                     return;
                 }
 
                 // Upload all images into server
                 listAndUploadAllImages(images, withChapters);
+
+                // Clear temp directory
+                WorkspaceUtils.clearTempDir();
             }).start();
         } else if (!uploadFiles.hasSelectedFiles()) {
             showError(LocaleManager.getString("gui.no_selected_files"));
@@ -466,6 +469,9 @@ public class MainController {
                     // Show Page URL node
                     FXUtils.setNodeVisible(hbUrl);
 
+                    // Clear selected files in Drag'N'Drop and reset upload mode to hide progress bar
+                    clearDragNDrop();
+
                     // Create new UploadInfo, add new Node into list and save Info list into Settings
                     createUploadInfo(
                             tfTitle.getText(),
@@ -476,10 +482,6 @@ public class MainController {
                                     .collect(Collectors.toList()),
                             taDescription.getText()
                     );
-
-
-                    // Clear selected files in Drag'N'Drop and reset upload mode to hide progress bar
-                    clearDragNDrop();
                 });
             }
 

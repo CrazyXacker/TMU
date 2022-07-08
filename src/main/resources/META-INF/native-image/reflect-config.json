@@ -411,6 +411,12 @@
   "allDeclaredMethods":true
 },
 {
+  "name":"javafx.scene.control.Tooltip",
+  "allDeclaredMethods":true,
+  "allPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"javafx.scene.ParallelCamera"
 },
 {

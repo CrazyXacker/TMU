@@ -52,7 +52,7 @@ public class BookInfo {
             unpacker.open(archiveFile.toString());
 
             return Optional.ofNullable(is = findBookInfoStreamInArchive(unpacker))
-                    .map(InputStreamReader::new)
+                    .map(stream -> new InputStreamReader(stream, StandardCharsets.UTF_8))
                     .map(BookInfo::readJsonFromReader)
                     .orElse(null);
         } catch (Exception ignored) {
