@@ -16,7 +16,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
 public class Main extends Application {
-    public static final String APP_VERSION = "v1.2";
+    public static final String APP_VERSION = "v1.3";
     public static final String APP_NAME = "TelegraphMangaUploader";
     public static final String APP_GITHUB_URL = "https://github.com/CrazyXacker/TMU";
     public static final Gson GSON;

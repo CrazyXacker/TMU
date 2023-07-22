@@ -24,7 +24,7 @@ apply plugin: 'com.gluonhq.client-gradle-plugin'
 apply plugin: 'com.sandec.jpro'
 
 group 'com.crazyxacker.apps.tmu'
-version '1.2'
+version '1.3'
 applicationName = 'TelegraphMangaUploader'
 mainClassName = 'com.crazyxacker.apps.tmu.Main'
 compileJava.options.encoding = 'UTF-8'
