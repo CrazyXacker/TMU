@@ -1,2 +1,8 @@
 [
+  {
+    "interfaces":["com.sun.jna.platform.win32.User32"]
+  },
+  {
+    "interfaces":["xyz.tmuapp.jna.StageOps$DwmSupport"]
+  }
 ]

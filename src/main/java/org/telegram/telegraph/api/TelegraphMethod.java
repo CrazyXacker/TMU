@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.telegram.telegraph.TelegraphContext;
 import org.telegram.telegraph.exceptions.TelegraphException;
 import org.telegram.telegraph.exceptions.TelegraphRequestException;
-import org.telegram.telegraph.executors.TelegraphExecutorFactory;
 
 /**
  * @author Ruben Bermudez

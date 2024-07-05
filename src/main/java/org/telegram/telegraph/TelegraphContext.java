@@ -2,10 +2,6 @@ package org.telegram.telegraph;
 
 import org.telegram.telegraph.executors.DefaultTelegraphExecutorFactory;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by rubenlagus on 15/12/2016.
  */

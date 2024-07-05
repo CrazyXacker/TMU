@@ -1,15 +1,15 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+
 buildscript {
     repositories {
         maven { url "https://nexus.gluonhq.com/nexus/content/repositories/releases"}
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://sandec.jfrog.io/artifactory/repo" }
     }
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:5.2.0"
-        classpath "io.franzbecker:gradle-lombok:4.0.0"
-        classpath 'org.openjfx:javafx-plugin:0.0.10'
-        classpath 'com.gluonhq:client-gradle-plugin:0.1.42'
-        classpath 'com.sandec.jpro:jpro-plugin-gradle:2022.1.0'
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+        classpath 'io.freefair.gradle:lombok-plugin:8.3'
+        classpath 'org.openjfx:javafx-plugin:0.1.0'
+        classpath 'com.gluonhq:gluonfx-gradle-plugin:1.0.22'
     }
 }
 
@@ -18,15 +18,15 @@ apply plugin: 'application'
 apply plugin: 'idea'
 
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'io.franzbecker.gradle-lombok'
+apply plugin: 'io.freefair.lombok'
 apply plugin: 'org.openjfx.javafxplugin'
-apply plugin: 'com.gluonhq.client-gradle-plugin'
-apply plugin: 'com.sandec.jpro'
+apply plugin: 'com.gluonhq.gluonfx-gradle-plugin'
 
-group 'com.crazyxacker.apps.tmu'
-version '1.3'
+group 'xyz.tmuapp'
+version '2.0'
 applicationName = 'TelegraphMangaUploader'
-mainClassName = 'com.crazyxacker.apps.tmu.Main'
+mainClassName = 'xyz.tmuapp.FXRunner'
+
 compileJava.options.encoding = 'UTF-8'
 System.setProperty('file.encoding', 'UTF-8')
 
@@ -38,67 +38,57 @@ repositories {
     maven { url 'https://nexus.gluonhq.com/nexus/content/repositories/releases/' }
 }
 
-jpro {
-    // for debugging
-    // JVMArgs << '-agentlib:jdwp=transport=dt_socket,server=n,address=5006,suspend=y'
+OperatingSystem os = DefaultNativePlatform.currentOperatingSystem
+gluonfx {
+    appIdentifier = applicationName
 
-    JVMArgs << '-Xmx1000m'
-
-    //jpro server port
-    port = 8082
-}
-
-gluonClient {
-    graalvmHome = "C:\\GraalVM\\graalvm-ce-java11-21.1.0"
+    if (os.isWindows()) {
+        graalvmHome = GRAALVM_WINDOWS_HOME
+    } else if (os.isLinux()) {
+        graalvmHome = GRAALVM_LINUX_HOME
+    } else if (os.isMacOsX()) {
+        graalvmHome = GRAALVM_MACOSX_HOME
+    }
 }
 
 javafx {
-    version = '16'
+    version = '22'
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics']
-}
-
-lombok {
-    version = "1.18.10"
-    sha256 = ""
 }
 
 dependencies {
     // AnnotationsProcessors
-    // Lombok
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
-
-    // SubstrateVM features
-    compileOnly "org.graalvm.nativeimage:svm:21.1.0"
-
-    // JetBrains Annotations
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    implementation 'org.projectlombok:lombok:1.18.30'
     compileOnly 'org.jetbrains:annotations:20.1.0'
 
-    // JavaFX (Material Design)
-    compile 'com.jfoenix:jfoenix:9.0.10'
+    // SubstrateVM features
+    compileOnly 'org.graalvm.nativeimage:svm:23.1.3'
 
-    // JavaFX (Icons)
-    compile 'de.jensd:fontawesomefx-commons:11.0'
-    compile 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-11'
-    compile 'de.jensd:fontawesomefx-materialicons:2.2.0-11'
+    // JNA
+    implementation 'net.java.dev.jna:jna:5.13.0'
+    implementation 'net.java.dev.jna:jna-platform:5.13.0'
+
+    // Ikonli
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
 
     // JSON
-    compile 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // TelegraphAPI
-//    compile 'org.telegram:telegraph:1.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.2'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
     implementation 'org.json:json:20160810'
     implementation 'javax.validation:validation-api:1.1.0.Final'
 
     // Content detection
-    compile "org.apache.tika:tika-core:1.24.1"
-    compile "net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01"
-    compile "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01"
+    implementation "org.apache.tika:tika-core:1.24.1"
+    implementation "net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01"
+    implementation "net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01"
 
     // Apache Commons
-    compile "commons-io:commons-io:2.5"
+    implementation "commons-io:commons-io:2.5"
 }
 
 jar {
@@ -110,23 +100,8 @@ jar {
     }
 }
 
-task nativePostBuild {
-    doLast {
-        exec {
-            workingDir "${projectDir}/tools"
-            executable "${workingDir}/set_native_image_icon.cmd"
-        }
-        exec {
-            workingDir "${projectDir}/tools"
-            executable "${workingDir}/upx_pack.cmd"
-        }
-    }
-}
-nativeBuild.dependsOn nativePostBuild
-
 run {
-    new File(project.buildDir, "/resources/main/config.properties").delete()
-    applicationDefaultJvmArgs = [
+    var appArgs = [
             "--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
             "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
@@ -171,49 +146,6 @@ run {
             "--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
             "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
     ]
-    jvmArgs = [
-            "--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
-            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
-            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
-            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
-            "--add-opens=java.base/java.io=ALL-UNNAMED",
-            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
-            "--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
-            "--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED",
-            "--add-exports=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
-            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
-            // For various usages of TraversalEngine
-            "--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
-            "--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
-            // For various behaviors across controls
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
-            // For ReadOnlyUnbackedObservableList across files
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
-            // For InputMap used in behavior classes
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED",
-            // For EventHandlerManager in AutoCompletionBinding
-            "--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
-            // For MappingChange, NonIterableChange across files
-            "--add-exports=javafx.base/com.sun.javafx.collections=ALL-UNNAMED",
-            // For VersionInfo in VersionChecker
-            "--add-exports=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
-            // For accessing VirtualFlow field from the base class in GridViewSkin
-            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
-            // For accessing getChildren in ImplUtils
-            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
-            "--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
-            "--add-opens=javafx.base/com.sun.javafx.collections=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
-            "--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
-            "--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
-            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
-    ]
+    applicationDefaultJvmArgs = appArgs
+    jvmArgs = appArgs
 }

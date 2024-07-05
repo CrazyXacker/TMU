@@ -1,104 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.crazyxacker.apps.tmu.controls.DragNDropFilesView?>
-<?import com.crazyxacker.apps.tmu.controls.EmptyView?>
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.materialdesignicons.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="600.0" prefWidth="800.0"
-           style="-fx-background-color: -fx-primary-color;" xmlns="http://javafx.com/javafx/11.0.14-internal"
-           fx:controller="com.crazyxacker.apps.tmu.controller.MainController">
+<?import org.kordamp.ikonli.javafx.*?>
+
+<?import xyz.tmuapp.controls.DragNDropFilesView?>
+<?import xyz.tmuapp.controls.EmptyView?>
+<StackPane fx:id="root" prefHeight="850.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.tmuapp.controller.MainController">
     <BorderPane>
         <center>
             <VBox alignment="CENTER" fillWidth="false" spacing="20.0" BorderPane.alignment="CENTER">
-                <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" spacing="6.0">
+                    <ImageView fx:id="ivLogo" fitHeight="75.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" />
+                    <Pane prefWidth="206.0" HBox.hgrow="ALWAYS" />
+                    <Button alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" onAction="#changeTheme" prefHeight="40.0" prefWidth="40.0" styleClass="border-transparent" text=" ">
+                        <graphic>
+                            <FontIcon fx:id="fiTheme" iconLiteral="mdi2l-lightbulb" iconSize="22" />
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="%gui.change_language_tooltip" />
+                        </tooltip>
+                    </Button>
+                    <Button fx:id="btnLanguage" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" onAction="#changeLanguage" prefHeight="40.0" prefWidth="46.0" style="-fx-font-size: 13.0; -fx-font-weight: bold" styleClass="border-transparent" text="RU">
+                        <tooltip>
+                            <Tooltip text="%gui.change_language_tooltip" />
+                        </tooltip>
+                    </Button>
+                    <Button alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" onAction="#openGitHub" prefHeight="40.0" prefWidth="40.0" styleClass="border-transparent" text=" ">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2g-github" iconSize="22" />
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="GitHub" />
+                        </tooltip>
+                    </Button>
+                    <VBox.margin>
+                        <Insets left="8.0" right="8.0" />
+                    </VBox.margin>
+                </HBox>
+
+                <HBox alignment="CENTER" prefWidth="550.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextField fx:id="tfTitle" focusColor="#ffffff00" promptText="%gui.title"
-                                      style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
-                                      HBox.hgrow="ALWAYS">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
+                        <TextField fx:id="tfTitle" promptText="%gui.title" style="-fx-font-size: 16.0" HBox.hgrow="ALWAYS">
                             <HBox.margin>
-                                <Insets left="8.0" right="8.0"/>
+                                <Insets left="8.0" right="8.0" />
                             </HBox.margin>
-                        </JFXTextField>
+                        </TextField>
                     </children>
                 </HBox>
                 <HBox prefWidth="550.0" spacing="20.0">
-                    <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER" prefWidth="270.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXTextField fx:id="tfAuthor" focusColor="#ffffff00" promptText="%gui.author"
-                                          style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
-                                          HBox.hgrow="ALWAYS">
-                                <font>
-                                    <Font size="16.0"/>
-                                </font>
+                            <TextField fx:id="tfAuthor" promptText="%gui.author" style="-fx-font-size: 16.0" HBox.hgrow="ALWAYS">
                                 <HBox.margin>
-                                    <Insets left="8.0" right="8.0"/>
+                                    <Insets left="8.0" right="8.0" />
                                 </HBox.margin>
-                            </JFXTextField>
+                            </TextField>
                         </children>
                     </HBox>
-                    <HBox alignment="CENTER" prefWidth="270.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER" prefWidth="270.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXTextField fx:id="tfAuthorLink" focusColor="#ffffff00" promptText="%gui.author_link"
-                                          style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
-                                          HBox.hgrow="ALWAYS">
-                                <font>
-                                    <Font size="16.0"/>
-                                </font>
+                            <TextField fx:id="tfAuthorLink" promptText="%gui.author_link" style="-fx-font-size: 16.0" HBox.hgrow="ALWAYS">
                                 <HBox.margin>
-                                    <Insets left="8.0" right="8.0"/>
+                                    <Insets left="8.0" right="8.0" />
                                 </HBox.margin>
-                            </JFXTextField>
+                            </TextField>
                         </children>
                     </HBox>
                 </HBox>
-                <HBox alignment="CENTER" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" prefWidth="550.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextField fx:id="tfTags" focusColor="#ffffff00" promptText="%gui.tags"
-                                      style="-fx-text-fill: -fx-accent-color;" unFocusColor="#ffffff00"
-                                      HBox.hgrow="ALWAYS">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
+                        <TextField fx:id="tfTags" promptText="%gui.tags" style="-fx-font-size: 16.0" HBox.hgrow="ALWAYS">
                             <HBox.margin>
-                                <Insets left="8.0" right="8.0"/>
+                                <Insets left="8.0" right="8.0" />
                             </HBox.margin>
-                        </JFXTextField>
-                        <JFXCheckBox fx:id="cbPublishTags"
-                                     style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;"
-                                     text="%gui.publish">
+                        </TextField>
+                        <CheckBox fx:id="cbPublishTags" style="-fx-font-size: 14;" text="%gui.publish">
                             <HBox.margin>
-                                <Insets right="8.0"/>
+                                <Insets right="8.0" />
                             </HBox.margin>
-                        </JFXCheckBox>
+                        </CheckBox>
                     </children>
                 </HBox>
-                <VBox alignment="CENTER_RIGHT" prefWidth="550.0" styleClass="border-colored-bold" HBox.hgrow="ALWAYS">
+                <VBox alignment="CENTER_RIGHT" prefWidth="550.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextArea fx:id="taDescription" focusColor="transparent" labelFloat="false" maxHeight="200.0"
-                                     maxWidth="1.7976931348623157E308" prefHeight="200.0" promptText="%gui.description"
-                                     styleClass="text-area-transparent" unFocusColor="transparent">
-                            <font>
-                                <Font size="14.0"/>
-                            </font>
+                        <TextArea fx:id="taDescription" maxHeight="200.0" maxWidth="1.7976931348623157E308" prefHeight="200.0" promptText="%gui.description" style="-fx-font-size: 14.0" styleClass="text-area-transparent">
                             <VBox.margin>
-                                <Insets left="8.0" right="8.0"/>
+                                <Insets left="8.0" right="8.0" />
                             </VBox.margin>
-                        </JFXTextArea>
-                        <JFXCheckBox fx:id="cbPublishDescription"
-                                     style="-jfx-checked-color: -fx-accent-color; -fx-font-size: 14; -fx-text-fill: -fx-accent-color;"
-                                     text="%gui.publish">
+                        </TextArea>
+                        <CheckBox fx:id="cbPublishDescription" style="-fx-font-size: 14;" text="%gui.publish">
                             <VBox.margin>
-                                <Insets bottom="8.0" right="8.0" top="8.0"/>
+                                <Insets bottom="8.0" right="8.0" top="8.0" />
                             </VBox.margin>
-                        </JFXCheckBox>
+                        </CheckBox>
                     </children>
                 </VBox>
                 <DragNDropFilesView fx:id="uploadFiles" prefHeight="250.0" prefWidth="550.0"
@@ -107,118 +104,79 @@
                                     BorderPane.alignment="CENTER"/>
                 <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" spacing="8.0">
                     <children>
-                        <JFXButton fx:id="btnUpload" alignment="CENTER" buttonType="FLAT" minWidth="100.0"
-                                   prefHeight="32.0" ripplerFill="WHITE" style="-fx-text-fill: -fx-primary-color;"
-                                   styleClass="button-colored-no-shadow" text="%gui.upload" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btnUpload" alignment="CENTER" minWidth="100.0" prefHeight="32.0" style="-fx-font-size: 16.0" text="%gui.upload" HBox.hgrow="ALWAYS">
                             <graphic>
-                                <MaterialDesignIconView fx:id="mdivUpload" glyphName="UPLOAD"
-                                                        glyphStyle="-fx-fill: -fx-primary-color;" size="16px"/>
+                                <FontIcon fx:id="mdivUpload" iconLiteral="mdi2c-cloud-upload" iconSize="16" />
                             </graphic>
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </JFXButton>
-                        <JFXButton fx:id="btnUploadWithChapters" visible="false" managed="false" alignment="CENTER"
-                                   buttonType="FLAT" minWidth="100.0" prefHeight="32.0" ripplerFill="WHITE"
-                                   style="-fx-text-fill: -fx-primary-color;" styleClass="button-colored-no-shadow"
-                                   text="%gui.upload_with_chapters" HBox.hgrow="ALWAYS">
+                        </Button>
+                        <Button fx:id="btnUploadWithChapters" alignment="CENTER" managed="false" minWidth="100.0" prefHeight="32.0" style="-fx-font-size: 16.0" text="%gui.upload_with_chapters" visible="false" HBox.hgrow="ALWAYS">
                             <graphic>
-                                <MaterialDesignIconView fx:id="mdivUploadWithChapters" glyphName="UPLOAD"
-                                                        glyphStyle="-fx-fill: -fx-primary-color;" size="16px"/>
+                                <FontIcon fx:id="mdivUploadWithChapters" iconLiteral="mdi2c-cloud-upload" iconSize="16" />
                             </graphic>
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </JFXButton>
+                        </Button>
                     </children>
                 </HBox>
-                <HBox fx:id="hbUrl" alignment="CENTER" managed="false" prefWidth="550.0"
-                      styleClass="border-colored-bold" visible="false" HBox.hgrow="ALWAYS">
+                <HBox fx:id="hbUrl" alignment="CENTER" managed="false" prefWidth="550.0" visible="false" HBox.hgrow="ALWAYS">
                     <children>
-                        <JFXTextField fx:id="tfUrl" focusColor="#ffffff00" style="-fx-text-fill: -fx-accent-color;"
-                                      unFocusColor="#ffffff00" HBox.hgrow="ALWAYS">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
+                        <TextField fx:id="tfUrl" style="-fx-font-size: 16.0" HBox.hgrow="ALWAYS">
                             <HBox.margin>
-                                <Insets left="8.0" right="8.0"/>
+                                <Insets left="8.0" right="8.0" />
                             </HBox.margin>
-                        </JFXTextField>
-                        <StackPane fx:id="spCopyImage" prefHeight="36.0" prefWidth="36.0">
-                            <children>
-                                <MaterialDesignIconView fx:id="mdivCopyImage" glyphName="IMAGE"
-                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
-                            </children>
-                        </StackPane>
+                        </TextField>
                         <StackPane fx:id="spCopyForTelegram" prefHeight="36.0" prefWidth="36.0">
                             <children>
-                                <MaterialDesignIconView fx:id="mdivCopyForTelegram" glyphName="TELEGRAM"
-                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                                <FontIcon fx:id="mdivCopyForTelegram" iconLiteral="mdi2t-telegram" iconSize="20" />
                             </children>
                         </StackPane>
                         <StackPane fx:id="spCopyLink" prefHeight="36.0" prefWidth="36.0">
                             <children>
-                                <MaterialDesignIconView fx:id="mdivCopyLink" glyphName="CONTENT_COPY"
-                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                                <FontIcon fx:id="mdivCopyLink" iconLiteral="mdi2c-content-copy" iconSize="20" />
                             </children>
                             <HBox.margin>
-                                <Insets/>
+                                <Insets />
                             </HBox.margin>
                         </StackPane>
                         <StackPane fx:id="spOpenInBrowser" prefHeight="36.0" prefWidth="36.0">
                             <children>
-                                <MaterialDesignIconView fx:id="mdivOpenInBrowser" glyphName="WEB"
-                                                        glyphStyle="-fx-fill: grey;" size="20px"/>
+                                <FontIcon fx:id="mdivOpenInBrowser" iconLiteral="mdi2w-web" iconSize="20" />
                             </children>
                             <HBox.margin>
-                                <Insets/>
+                                <Insets />
                             </HBox.margin>
                         </StackPane>
                     </children>
                     <VBox.margin>
-                        <Insets top="16.0"/>
+                        <Insets top="16.0" />
                     </VBox.margin>
                 </HBox>
             </VBox>
         </center>
         <bottom>
-            <Label fx:id="lblError" managed="false" style="-fx-text-fill: #e42121" text="Label" visible="false"
-                   BorderPane.alignment="CENTER">
+            <Label fx:id="lblError" managed="false" style="-fx-text-fill: #e42121; -fx-font-size: 16.0; -fx-font-weight: bold" text="Label" visible="false" BorderPane.alignment="CENTER">
                 <BorderPane.margin>
-                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                 </BorderPane.margin>
-                <font>
-                    <Font name="System Bold" size="16.0"/>
-                </font>
             </Label>
         </bottom>
         <right>
             <StackPane>
-                <VBox alignment="TOP_CENTER" prefWidth="350.0"
-                      style="-fx-border-style: hidden hidden hidden solid; -fx-border-width: 1; -fx-border-color: -fx-divider-color"
-                      BorderPane.alignment="CENTER">
+                <VBox alignment="TOP_CENTER" prefWidth="450.0" style="-fx-border-style: hidden hidden hidden solid; -fx-border-width: 1; -fx-border-color: -color-border-subtle; -fx-font-size: 15.0; -fx-font-weight: bold" BorderPane.alignment="CENTER">
                     <children>
                         <Label text="%gui.my_uploads">
                             <VBox.margin>
-                                <Insets bottom="8.0" top="8.0"/>
+                                <Insets bottom="8.0" top="8.0" />
                             </VBox.margin>
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
                         </Label>
                         <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                             <content>
-                                <VBox fx:id="vbUploads">
+                                <VBox fx:id="vbUploads" spacing="6.0">
                                     <padding>
-                                        <Insets left="4.0"/>
+                                        <Insets left="4.0" top="4.0" />
                                     </padding>
                                 </VBox>
                             </content>
                         </ScrollPane>
                     </children>
-                    <BorderPane.margin>
-                        <Insets/>
-                    </BorderPane.margin>
                 </VBox>
                 <EmptyView fx:id="evEmptyView"/>
             </StackPane>

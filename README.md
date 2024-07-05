@@ -1,4 +1,8 @@
-**TMU** is very simple app for posting your digital manga (or any other image batch) as article into **Telegraph** for further reading using any browser or in **Telegram** with **Instant View**.
+<p align="center">
+  <img src="images/logo.png" alt="Logo">
+</p>
+
+**TMU** (TelegraphMangaUploader) is very simple app for posting your digital manga (or any other image batch) as article into **Telegraph** for further reading using any browser or in **Telegram** with **Instant View**.
 
 App may be very helpful for content translators that searching easy way to share their work.
 
@@ -14,20 +18,26 @@ App may be very helpful for content translators that searching easy way to share
 - Support of **zip, cbz** archives when running in **Native Image** mode (from native executable file)
 
 ## Images:
-![First](images/1.png)
-![Second](images/2.png)
-![Third](images/3.png)
-![Fourth](images/4.png)
-![Fifth](images/5.png)
+<p align="center">
+    <img src="images/1.png" width="400">
+    <img src="images/2.png" width="400">
+    <img src="images/3.png" width="400">
+    <img src="images/4.png" width="400">
+</p>
 
 ## Download:
 Navigate to Releases section and download latest version of app
 
 ## Building:
-You will need [IntelliJ IDEA](https://www.jetbrains.com/) and [GraalVM CE 21.1.0](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-21.1.0) (**Java 11 based**)
+You will need [IntelliJ IDEA](https://www.jetbrains.com/) and [GraalVM 17](https://www.graalvm.org/downloads/) (**Java 17**)
 
-Open project in IDEA, navigate to ```build.gradle``` file and change variable `graalvmHome` to path to your GraalVM folder.
-Do this with `org.gradle.java.home` variable in `gradle.properties` file. Sync project
+Clone repository and open project root folder. Create file `gradle.properties` with content:
+```
+GRAALVM_WINDOWS_HOME = {path}
+GRAALVM_LINUX_HOME = {path}
+GRAALVM_MACOSX_HOME = {path}
+```
+where `{path}` - path to `GraalVM` folder. Then open project with `IDEA`
 
 ### Building GraalVM Native Image executable:
 **WARNING:** *you need at least 10GB of RAM to build native image! Native Build uses up to 8GB of RAM per build!*
@@ -44,17 +54,16 @@ Just type `gradlew nativeBuild nativeRun` in that Terminal session, hit Enter an
 
 Build will finish with app launch. Navigate to `{projectDir}\build\client\x86_64-windows` on `Windows` or `{projectDir}/build/client/x86_64-linux` on `Linux` to find executable files.
 
-On `Windows` it will be `TelegraphMangaUploader.exe` (non packed) and `TMU.exe` (UPXed).
-
-On `Linux` it will be `TelegraphMangaUploader` (non packed. You can pack this file by yourself with UPX if you want)
+On `Windows` it will be `TelegraphMangaUploader.exe`.
+On `Linux` it will be `TelegraphMangaUploader`
 
 ### Building JVM jar file:
-You also need [JavaFX 17 jmods](https://gluonhq.com/products/javafx//) runtime files places anywhere on your system
+You also need [JavaFX 22 jmods](https://gluonhq.com/products/javafx//) runtime files places anywhere on your system
 
 Simply execute `shadowJar` task
 
 Result fat jar you can run using this command (replace variables with curly brackets to your own:
-`{path_to_java_exe_from_jvm_sdk} -Dprism.dirtyopts=false --module-path={path_to_jfx_jmods_folder} --add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics --add-opens javafx.graphics/javafx.css=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.css=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.collections=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED --add-opens javafx.graphics/javafx.scene=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.text=ALL-UNNAMED --add-opens=javafx.graphics/javafx.scene.text=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED -jar {path_to_jar}`
+`{path_to_java_exe_from_jvm_sdk} --module-path={path_to_jfx_jmods_folder} --add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics --add-opens javafx.graphics/javafx.css=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.css=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-exports javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.collections=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED --add-opens javafx.graphics/javafx.scene=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.text=ALL-UNNAMED --add-opens=javafx.graphics/javafx.scene.text=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED -jar {path_to_jar}`
 
 
 
