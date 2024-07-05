@@ -9,10 +9,10 @@ import java.util.List;
 public class TelegramUtils {
 
     public static String createTelegramPostText(UploadInfo info) {
-        boolean addEllipsize = info.getDescription().length() > 700;
-        String newDescription = StringUtils.isNotEmpty(info.getDescription())
-                ? String.format("\n\n__%s%s__", info.getDescription().substring(0, 700), (addEllipsize ? "..." : ""))
-                : "";
+        String newDescription = info.getDescription();
+        if (StringUtils.isNotEmpty(newDescription) && newDescription.length() > 700) {
+            newDescription = String.format("\n\n__%s%s__", info.getDescription().substring(0, 700), "...");
+        }
 
         String tagsLine = StringUtils.join(",", info.getTags());
 
